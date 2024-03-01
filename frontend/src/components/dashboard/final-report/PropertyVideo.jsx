@@ -44,7 +44,7 @@ const PropertyVideo = ({ SomeComponent, leadId }) => {
 
   const [metalSalvageValue,setMetalSalvageValue]=useState(5);
   const [lessExcess,setLessExcess]=useState(0);
-  const [currentGst, setCurrentGst] = useState(18);
+  const [currentGst, setCurrentGst] = useState(0);
 
   const [overallMetalDep, setOverallMetailDep] = useState(0);
   const [totalAgeOfvehicle, setTotalAgeOfVehicle] = useState(0);
@@ -267,6 +267,7 @@ useEffect(()=>{
       total_taxable_amount = 0,
       total_tax = 0,
       total_aassessed_wihtout_tax = 0;
+      
     allRows.map((row, index) => {
       if (String(row.isActive) === "1") {
         const current_row_estimate =
@@ -277,15 +278,20 @@ useEffect(()=>{
     });
     allRows.map((row, index) => {
       if (String(row.isActive) === "1") {
+        const dep = row.type === 1 && (String(policyType) === "Regular" || String(policyType) === "null") ?
+        (Number(row.assessed)*Number(12.5))/100:0;
+
+        console.log(index,row.type,dep,policyType);
+
         const current_row_assessed =
           Number(row?.assessed) -
-          calculateGSTWithPaintValue(row?.assessed, row.type, row.gst);
+          calculateGSTWithPaintValue(row?.assessed, row.type, row.gst)-dep;
       
-        const dep = String(policyType) === "Regular"?
-        (Number(row.assessed)*Number(12.5))/100:0;
+          console.log("Policy Type",policyType)
+       
         total_taxable_amount =
           total_taxable_amount +
-          (Number(row.gst) % 2 !== 0 ? current_row_assessed : 0)-dep;
+          (Number(row.gst) % 2 !== 0 ? current_row_assessed : 0);
 
         const current_row_assessed_tax = calculateTaxValue(
           row?.assessed,
@@ -526,7 +532,8 @@ const [AccidentTime,setAccidentTime]=useState("");
     setDepreciationOnParts(claim?.summaryDetails?.DepreciationOnParts?claim?.summaryDetails?.DepreciationOnParts:"");
     setNetAssessedAmount(claim?.summaryDetails?.NetAssessedAmount?claim?.summaryDetails?.NetAssessedAmount:"");
     setSavageDepreciationDetails(claim?.summaryDetails?.SavageDepreciationDetails?claim?.summaryDetails?.SavageDepreciationDetails:"");
-    setCashLess(claim?.summaryDetails?.CashLess?claim?.summaryDetails?.CashLess:0);
+    console.log(String(claim?.summaryDetails?.CashLess) === "1.00")
+    setCashLess(String(claim?.summaryDetails?.CashLess) === "1.00"?1:0);
     setNoteOfSelf(claim?.summaryDetails?.NoteOfSelf?claim?.summaryDetails?.NoteOfSelf:"");
     setRepairAutoDate(claim?.summaryDetails?.RepairAutoDate?claim?.summaryDetails?.RepairAutoDate:"");
     setRepairCompletionDate(claim?.summaryDetails?.RepairCompletionDate?claim?.summaryDetails?.RepairCompletionDate:"");

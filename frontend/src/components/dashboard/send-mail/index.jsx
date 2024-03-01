@@ -25,7 +25,7 @@ const index = ({ leadId, email, policyNo, Insured, vehicleNo }) => {
           id="DashboardOffcanvasMenu"
           data-bs-scroll="true"
         >
-          <SidebarMenu />
+          <SidebarMenu leadId={leadId}/>
         </div>
       </div>
       {/* End sidebar_menu */}

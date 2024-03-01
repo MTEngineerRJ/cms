@@ -226,7 +226,7 @@ const Form = ({
                             selected={
                               DateRegistration !== null && !isNaN(new Date(DateRegistration))
                                 ? new Date(DateRegistration)
-                                : null
+                                : ""
                             }
                             onChange={(date) => setDateRegistration(date)}
                           /> 
@@ -236,7 +236,7 @@ const Form = ({
                             selected={
                               DateRegistration !== null && !isNaN(new Date(DateRegistration))
                                 ? new Date(DateRegistration)
-                                : null
+                                : ""
                             }
                             onChange={(date) => setDateRegistration(date)}
                           /> 

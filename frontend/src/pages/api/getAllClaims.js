@@ -7,12 +7,18 @@ import axios from "axios";
 
     const domain = process.env.BACKEND_DOMAIN;
 
-
+    const { Region1, Region2, Region3, CalimStatus } = request.query;
     const userResponse = await axios.get(`${domain}/claim/getAllClaims`,
     {
         headers: {
           Authorization:token,
           "Content-Type":"application/json"
+        },
+        params: {
+          Region1,
+          Region2,
+          Region3,
+          CalimStatus,
         },
         
       });

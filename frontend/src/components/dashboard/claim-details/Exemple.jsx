@@ -4,6 +4,7 @@
   import JSZip from "jszip";
   import { FaCross, FaDropbox, FaRedo, FaUpload } from "react-icons/fa";
   import axios from "axios";
+import toast from "react-hot-toast";
   // import { useParams } from 'next/navigation'
   const headCells = [
     {
@@ -366,131 +367,89 @@
   export default function Exemple({ documents,leadId  }) {
     const [updatedCode, setUpdatedCode] = useState([]);
     const [selectedFile, setSelectedFile] = useState([]);
+    const [uploadedFiles,setUploadedFiles]=useState([]);
+
+    const [currentDoc,setCurrentDoc]=useState("");
 
     console.log("leadId------>", leadId);
 
-    const onUploadHandler = async (label, index) => {
-      const selectedFileData = selectedFile.find((file) => file.index === index);
-    
-      if (selectedFileData) {
-        const payload = {
-          base64: selectedFileData.base64,
-          file: selectedFileData.file,
-          name: selectedFileData.file.name,
-        };
-    
-        try {
-          const response = await axios.post("/api/uploadFile", payload);
-          console.log("File uploaded successfully:", response.data);
-        } catch (error) {
-          console.error("Error uploading file:", error);
+
+  const checkValue = (label) => {
+    let requiredInfo = [];
+    documents.map((doc, index) => {
+      if (String(doc.DocumentName) === String(label)) {
+        console.log(doc);
+        if (doc.Photo1 !== "") {
+          requiredInfo.push({
+            name: doc.Attribute1,
+            url: doc.Photo1,
+          });
         }
-      } else {
-        console.log("Error --------->selectedFileData");    }
-    };
-    
-
-
-    const checkValue = (label) => {
-      let requiredInfo = [];
-      documents.map((doc, index) => {
-        if (String(doc.DocumentName) === String(label)) {
-          console.log(doc);
-          if (doc.Photo1 !== "") {
-            requiredInfo.push({
-              name: doc.Attribute1,
-              url: doc.Photo1,
-            });
-          }
-          if (doc.Photo2 !== "") {
-            requiredInfo.push({
-              name: doc.Attribute2,
-              url: doc.Photo2,
-            });
-          }
-          if (doc.Photo3 !== "") {
-            requiredInfo.push({
-              name: doc.Attribute3,
-              url: doc.Photo3,
-            });
-          }
-          if (doc.Photo4 !== "") {
-            requiredInfo.push({
-              name: doc.Attribute4,
-              url: doc.Photo4,
-            });
-          }
-          if (doc.Photo5 !== "") {
-            requiredInfo.push({
-              name: doc.Attribute5,
-              url: doc.Photo5,
-            });
-          }
-
-          //  console.log(requiredInfo);
+        if (doc.Photo2 !== "") {
+          requiredInfo.push({
+            name: doc.Attribute2,
+            url: doc.Photo2,
+          });
         }
-      });
-
-      return requiredInfo;
-    };
-
-    // const handleFileInputChange = async (e, idx) => {
-    //   const selectedFileCurrent = e.target.files[idx];
-    
-    //   let oldFiles = selectedFile;
-    //   let currentIndex = oldFiles.findIndex((file) => file.index === idx);
-    
-    //   let newFile = {
-    //     file: selectedFileCurrent,
-    //     index: currentIndex !== -1 ? currentIndex : idx,
-    //     base64: "",
-    //   };
-    
-    //   if (currentIndex !== -1) {
-    //     oldFiles[idx] = newFile;
-    //   } else {
-    //     oldFiles.push(newFile);
-    //   }
-    
-    //   // Read file as base64
-    //   const reader = new FileReader();
-    //   reader.onload = (e) => {
-    //     newFile.base64 = e.target.result;
-    //     setSelectedFile(oldFiles);
-    //   };
-    
-    //   reader.readAsDataURL(selectedFileCurrent);
-    //   console.log("selectedFile-------->",idx,"Filelll",newFile.base64);
-
-    //   setTimeout(async () => {
-    //     if (newFile) {
-    //       const payload = {
-    //         file: newFile.base64,
-    //         name: newFile.file.name,
-    //       };
-    
-    //       console.log('PAYLOAD',payload);
-      
-    //       try {
-    //         const response = await axios.post("/api/uploadFile", payload);
-    //         console.log("File uploaded successfully:", response.data);
-    //       } catch (error) {
-    //         console.error("Error uploading file:", error);
-    //       }
-    //     } else {
-    //       console.log("Accessing base64 after delay:", newFile.base64);
-    //     }
-    //   }, 1000);
-    // };
-    
-
+        if (doc.Photo3 !== "") {
+          requiredInfo.push({
+            name: doc.Attribute3,
+            url: doc.Photo3,
+          });
+        }
+        if (doc.Photo4 !== "") {
+          requiredInfo.push({
+            name: doc.Attribute4,
+            url: doc.Photo4,
+          });
+        }
+        if (doc.Photo5 !== "") {
+          requiredInfo.push({
+            name: doc.Attribute5,
+            url: doc.Photo5,
+          });
+        }
+      }
+      })
+    }
     
   // console.log("selectedFile-------->",selectedFile);
     
   
+  const getIndex = (docName,fileData)=>{
+    let index = -1;
+    console.log(docName,fileData);
+    fileData.map((file,idx)=>{
+      if(String(docName) === String(file.docName)){
+        index=idx;
+      }
+    })
+    return index;
+  }
+
+  function getFileNameFromUrl(url) {
+    // Create a URL object
+    const urlObject = new URL(url);
+
+    // Get the pathname (e.g., '/invoice.pdf')
+    const pathname = urlObject.pathname;
+
+    // Split the pathname using '/' and get the last part (filename)
+    const parts = pathname.split('/');
+    const filename = parts[parts.length - 1];
+
+    return filename;
+}
+
+let docCurrentName="Driving license";
+useEffect(()=>{
+  setCurrentDoc(docCurrentName)
+},[docCurrentName])
 
   const handleFileInputChange = async (e, idx,docs)  => {
-    console.log("idx------------>",idx);
+   
+    console.log("idx------------>",idx,currentDoc,docCurrentName);
+   
     const selectedFileCurrent = e.target.files[idx];
     let oldFiles = selectedFile;
     let currentIndex = oldFiles.findIndex((file) => file.index === idx);
@@ -500,21 +459,16 @@
       base64: "",
     };
   
-    if (currentIndex !== -1) {
-      oldFiles[idx] = newFile;
-    } else {
-      oldFiles.push(newFile);
-    }
+  //   let oldFiles = selectedFile;
+  //   let currentIndex = oldFiles.findIndex((file) => file.index === idx);
   
-    // Read file as base64
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      newFile.base64 = e.target.result;
-      setSelectedFile(oldFiles);
-    };
+  //   let newFile = {
+  //     file: selectedFileCurrent,
+  //     index: currentIndex !== -1 ? currentIndex : idx,
+  //     base64: "",
+  //   };
   
     reader.readAsDataURL(selectedFileCurrent);
-    console.log("selectedFile-------->", idx, "Filelll", newFile.base64);
   
     setTimeout(async () => {
       if (newFile) {
@@ -522,152 +476,247 @@
           file: [newFile.base64],
           name: [newFile.file.name],
         };
-  
-        console.log('PAYLOAD', payload);
-  
-        try {
-          const response = await axios.post("/api/uploadFile", payload);
 
-          const data = []
-           data.push({
-            leadId: leadId,
-            docName: docs,
-            data: response.data.userData.data
+   
+        toast.loading("Uploading file!");
+          axios.post("/api/uploadFile", payload)
+          .then((res)=>{
+
+            toast.dismiss();
+            toast.success("Sucessfully uploaded!");
+            
+            let oldFiles = uploadedFiles;
+
+            const index = getIndex(docCurrentName,oldFiles);
+            console.log("index",index);
+
+            if(index!==-1){
+                const oldFiles = oldFiles[index];
+                const oldData = oldFiles.data;
+                oldData.push({
+                  name:getFileNameFromUrl(res.data.userData),
+                  url:res.data.userData
+                });
+                const newUpload={
+                  leadId:leadId,
+                  docName:docCurrentName,
+                  data:oldData
+                }
+                oldFiles[index]=newUpload;
+                console.log(oldFiles);
+                setUploadedFiles(oldFiles);
+            }
+            else{
+
+              let newData = [];
+              newData.push({
+                name:getFileNameFromUrl(res.data.userData),
+                url:res.data.userData
+              })
+              const newUpload={
+                leadId:leadId,
+                docName:docCurrentName,
+                data:newData
+              }
+              const oldFiles = uploadedFiles;
+              oldFiles.push(newUpload);
+              console.log(oldFiles);
+              setUploadedFiles(oldFiles);
+            }
           })
-          console.log("File uploaded successfully:", response.data);
-
-          console.log('data',data)
-// return
-        const loot = JSON.stringify({ data: data });
-          const result = await  axios.post("/api/uploadDocument", loot, {
-            headers: {
-              Authorization: `Bearer ${""}`,
-              "Content-Type": "application/json",
-            },
+          .catch((err)=>{
+            toast.error(err);
           })
-          console.log("Result returned", result);
-
-        } catch (error) {
-          console.error("Error uploading file:", error);
         }
-      } else {
-        console.log("Accessing base64 after delay:", newFile.base64);
-      }
     }, 1000);
   };
+
   
   
+  console.log(uploadedFiles);
+
   
-  const getFileName = (idx)=>{
-      let currentIndex = "";
-      selectedFile.map((file,index)=>{
-        if((file?.index)===idx){
-          currentIndex=file?.file;
+// console.log("selectedFile-------->",selectedFile);
+  
+const handleReload = () => {
+  window.location.reload();
+};
+
+
+
+
+//     const handleButtonClick = (doc_name) => {
+//       console.log(doc_name)
+//       docCurrentName =(doc_name)
+//       // Trigger file input click when button is clicked
+//       document.getElementById('fileInput').click();
+//     };
+
+//       try {
+//         const zip = new JSZip();
+
+      
+      
+
+//         documents.map((data, index) => {
+//           if (data.Attribute1 !== "") {
+//             const fileName = data.Attribute1;
+//             zip.file(fileName, data.Photo1, { binary: true });
+//           }
+//           if (data.Attribute2 !== "") {
+//             const fileName = data.name;
+//             zip.file(fileName, data.url, { binary: true });
+//           }
+//           if (data.Attribute3 !== "") {
+//             const fileName = data.Attribute3;
+//             zip.file(fileName, data.Photo3, { binary: true });
+//           }
+//           if (data.Attribute4 !== "") {
+//             const fileName = data.Attribute4;
+//             zip.file(fileName, data.Photo4, { binary: true });
+//           }
+//           if (data.Attribute5 !== "") {
+//             const fileName = data.Attribute5;
+//             zip.file(fileName, data.Photo5, { binary: true });
+//           }
+//         });
+
+
+//         // console.log(zip);
+
+//         const content = await zip.generateAsync({ type: "blob" });
+
+//         // Triggering the download
+//         const a = document.createElement("a");
+//         const url = URL.createObjectURL(content);
+//         a.href = url;
+//         a.download = "downloadedFiles.zip";
+//         document.body.appendChild(a);
+//         a.click();
+//         document.body.removeChild(a);
+//         URL.revokeObjectURL(url);
+
+//         alert("Successfully downloaded the zip!");
+//       } catch (error) {
+//         console.error("Error uploading file:", error);
+//       }
+//     } else {
+//       console.log("Accessing base64 after delay:", newFile.base64);
+//     }
+//   }, 1000);
+// };
+
+
+
+const getFileName = (idx)=>{
+    let currentIndex = "";
+    selectedFile.map((file,index)=>{
+      if((file?.index)===idx){
+        currentIndex=file?.file;
+      }
+    });
+    return currentIndex
+  }
+
+  const handleButtonClick = () => {
+    // Trigger file input click when button is clicked
+    document.getElementById('fileInput').click();
+  };
+
+  const downloadAllFiles = async () => {
+    try {
+      const zip = new JSZip();
+
+    
+    
+
+      documents.map((data, index) => {
+        if (data.Attribute1 !== "") {
+          const fileName = data.Attribute1;
+          zip.file(fileName, data.Photo1, { binary: true });
+        }
+        if (data.Attribute2 !== "") {
+          const fileName = data.Attribute2;
+          zip.file(fileName, data.Photo2, { binary: true });
+        }
+        if (data.Attribute3 !== "") {
+          const fileName = data.Attribute3;
+          zip.file(fileName, data.Photo3, { binary: true });
+        }
+        if (data.Attribute4 !== "") {
+          const fileName = data.Attribute4;
+          zip.file(fileName, data.Photo4, { binary: true });
+        }
+        if (data.Attribute5 !== "") {
+          const fileName = data.Attribute5;
+          zip.file(fileName, data.Photo5, { binary: true });
         }
       });
-      return currentIndex
+
+      // console.log(zip);
+
+      const content = await zip.generateAsync({ type: "blob" });
+
+      // Triggering the download
+      const a = document.createElement("a");
+      const url = URL.createObjectURL(content);
+      a.href = url;
+      a.download = "downloadedFiles.zip";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      alert("Successfully downloaded the zip!");
+    } catch (error) {
+      console.error("Error during download:", error);
+      alert("Error during download. Please try again.");
     }
-
-    const handleButtonClick = () => {
-      // Trigger file input click when button is clicked
-      document.getElementById('fileInput').click();
-    };
-
-    const downloadAllFiles = async () => {
-      try {
-        const zip = new JSZip();
-
-      
-      
-
-        documents.map((data, index) => {
-          if (data.Attribute1 !== "") {
-            const fileName = data.Attribute1;
-            zip.file(fileName, data.Photo1, { binary: true });
-          }
-          if (data.Attribute2 !== "") {
-            const fileName = data.Attribute2;
-            zip.file(fileName, data.Photo2, { binary: true });
-          }
-          if (data.Attribute3 !== "") {
-            const fileName = data.Attribute3;
-            zip.file(fileName, data.Photo3, { binary: true });
-          }
-          if (data.Attribute4 !== "") {
-            const fileName = data.Attribute4;
-            zip.file(fileName, data.Photo4, { binary: true });
-          }
-          if (data.Attribute5 !== "") {
-            const fileName = data.Attribute5;
-            zip.file(fileName, data.Photo5, { binary: true });
-          }
-        });
-
-
-        // console.log(zip);
-
-        const content = await zip.generateAsync({ type: "blob" });
-
-        // Triggering the download
-        const a = document.createElement("a");
-        const url = URL.createObjectURL(content);
-        a.href = url;
-        a.download = "downloadedFiles.zip";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        alert("Successfully downloaded the zip!");
-      } catch (error) {
-        console.error("Error during download:", error);
-        alert("Error during download. Please try again.");
-      }
-    };
+  };
 
 
 
-    let tempCode = [];
-    useEffect(() => {
-      data.map((docs, index) => {
-        const allInfo = checkValue(docs.doc_name);
-        const fileName = getFileName(index);
-        const alllinks = (
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {allInfo?.map((info, idx) => (
-              <a href={info.url} key={idx} target="_blank">
-                {info.name}
-              </a>
-            ))}
-          </div>
-        );
+  let tempCode = [];
+  useEffect(() => {
+    data.map((docs, index) => {
+      const allInfo = checkValue(docs.doc_name);
+      const fileName = getFileName(index);
+      const alllinks = (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {allInfo?.map((info, idx) => (
+            <a href={info.url} key={idx} target="_blank">
+              {info.name}
+            </a>
+          ))}
+        </div>
+      );
 
-        const temp = {
-          _id: docs._id,
-          serial_num: docs.serial_num,
-          doc_name: docs.doc_name,
-          file: alllinks,
-          action: <>
-          <input type="file" id="fileInput" style={{ display: 'none' }} onChange={(e)=>handleFileInputChange(e,index,docs.doc_name)} ></input>
-          <button className="btn btn-thm" onClick={handleButtonClick}
-          >
-          <FaUpload /></button>
-          <p>{ fileName? `Selected File: ${fileName?.name}` : "Choose File"}</p>
+      const temp = {
+        _id: docs._id,
+        serial_num: docs.serial_num,
+        doc_name: docs.doc_name,
+        file: alllinks,
+        action: <>
+        <input type="file" id="fileInput" style={{ display: 'none' }} onChange={(e)=>handleFileInputChange(e,index,docs.doc_name)} ></input>
+        <button className="btn btn-thm" onClick={handleButtonClick}
+        >
+        <FaUpload /></button>
+        <p>{ fileName? `Selected File: ${fileName?.name}` : "Choose File"}</p>
 
-          
-          </>,
-          verify: docs.verify,
-        };
+        
+        </>,
+        verify: docs.verify,
+      };
 
-        tempCode.push(temp);
-      });
-      // data = tempCode;
-      setUpdatedCode(tempCode);
-    }, [documents]);
+      tempCode.push(temp);
+    });
+    // data = tempCode;
+    setUpdatedCode(tempCode);
+  }, [documents]);
 
 
 
-    console.log("updatedCode><><><",updatedCode)
+  console.log("updatedCode><><><",updatedCode)
 
     return (
       <SmartTable

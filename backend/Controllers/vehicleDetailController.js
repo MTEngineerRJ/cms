@@ -57,8 +57,11 @@ const getSpecificVehicleDetails = async (req, res) => {
       const details = result.data.vehicleDetails?.Data.result;
       const stringformat = convertObjectToString(details);
       
+      console.log(result);
       const additionalInfo = result?.data?.additionalInfo;
       const stringformat2 = convertObjectToString(additionalInfo);
+      console.log("details",stringformat);
+      console.log("additionalInfo",stringformat2);
 
       const surveyType = details?.VehicleType === "2W" ? "Motor2W" : "Motor4W";
       

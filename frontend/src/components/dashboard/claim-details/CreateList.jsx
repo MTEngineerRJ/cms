@@ -121,7 +121,6 @@ const CreateList = ({
   }, [policyStartDate]);
 
   useEffect(() => {
-    // Update policyStartEnd when policyStartDate changes
     if (
       policyEndDate == "null" ||
       policyEndDate == null ||
@@ -188,6 +187,10 @@ const CreateList = ({
         });
     }
   };
+
+  useEffect(()=>{
+    setPolicyEndDate(claim?.claimDetails?.PolicyPeriodEnd);
+  },[]);
   const openStatusUpdateHandler = () => {
     setIsStatusModal(true);
   };
@@ -612,7 +615,7 @@ const CreateList = ({
                 selected={
                   policyStartDate !== null && !isNaN(new Date(policyStartDate))
                     ? new Date(policyStartDate)
-                    : null
+                    : ""
                 }
                 onChange={(date) => setPolicyStartDate(date)}
               />
@@ -666,7 +669,7 @@ const CreateList = ({
                 selected={
                   policyEndDate !== null && !isNaN(new Date(policyEndDate))
                     ? new Date(policyEndDate)
-                    : null
+                    : ""
                 }
                 onChange={(date) => setPolicyEndDate(date)}
               />

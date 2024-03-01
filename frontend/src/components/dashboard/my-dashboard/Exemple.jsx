@@ -167,9 +167,9 @@ export default function Exemple({
       year: 'numeric', 
       month: 'long', 
       day: 'numeric', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      hour12: true 
+      // hour: 'numeric', 
+      // minute: 'numeric', 
+      // hour12: true 
     };
     const formattedISTDateTime = istDate.toLocaleString("en-US", options);
   

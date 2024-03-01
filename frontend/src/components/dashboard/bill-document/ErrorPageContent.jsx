@@ -214,7 +214,7 @@ const ErrorPageContent = ({feeReport}) => {
             <div className="col-lg-4">
               <span>Bill No. : {feeReport?.feeDetails?.BillID}</span>
               <br />
-              <span>Date : {formatDate(new Date())}</span>
+              <span>Date : {formatDate(new Date(feeReport?.feeDetails?.BillDate))}</span>
               <br />
               <span>Code : GH000057355</span>
             </div>

@@ -51,6 +51,12 @@ const Form_driver = ({
     return formattedDate;
   };
 
+  function formatDateToDDMMYYYY(date) {
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const formattedDate = new Date(date).toLocaleDateString('en-GB', options);
+    return formattedDate;
+  }
+
   const statusOptions = [
     {
       id: 1,
@@ -142,7 +148,8 @@ const Form_driver = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {claim?.driverDetails?.DriverName}
+                        {claim?.driverDetails?.DriverName&&claim?.driverDetails?.DriverName!=="null"?
+                        claim?.driverDetails?.DriverName:""}
                       </label>
                     </div>
                   </div>
@@ -172,7 +179,8 @@ const Form_driver = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {checkStatus(claim?.claimStatus?.Status)}
+                        {(claim?.driverDetails?.TypeOfVerification&&claim?.driverDetails?.TypeOfVerification!=="null"?
+                        claim?.driverDetails?.TypeOfVerification :"Not Verified")}
                       </label>
                     </div>
                   </div>
@@ -199,7 +207,8 @@ const Form_driver = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {formatDate(claim?.driverDetails?.VaildUpto)}
+                      {claim?.driverDetails?.ValidUpto&&claim?.driverDetails?.ValidUpto!=="null"?
+                      (claim?.driverDetails?.ValidUpto):""}
                     </label>
                   </div>
                 </td>
@@ -256,7 +265,8 @@ const Form_driver = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {claim?.driverDetails?.LicenseNumber}
+                        {claim?.driverDetails?.LicenseNumber && claim?.driverDetails?.LicenseNumber!=="null"?
+                        claim?.driverDetails?.LicenseNumber:""}
                       </label>
                     </div>
                   </div>
@@ -348,7 +358,8 @@ const Form_driver = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {claim?.driverDetails?.LicenseType}
+                        {claim?.driverDetails?.LicenseType&&claim?.driverDetails?.LicenseType!=="null"?
+                        claim?.driverDetails?.LicenseType:""}
                       </label>
                     </div>
                   </div>
@@ -471,7 +482,8 @@ const Form_driver = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {formatDate(claim?.driverDetails?.DateOfBirth)}
+                      {(claim?.driverDetails?.DateOfBirth&&claim?.driverDetails?.DateOfBirth!=="null"?
+                      (claim?.driverDetails?.DateOfBirth):"")}
                     </label>
                   </div>
                 </td>
@@ -527,7 +539,8 @@ const Form_driver = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {formatDate(claim?.driverDetails?.DateOfIssue)}
+                      {claim?.driverDetails?.DateOfIssue&&claim?.driverDetails?.DateOfIssue!=="null"?
+                      (claim?.driverDetails?.DateOfIssue):""}
                     </label>
                   </div>
                 </td>

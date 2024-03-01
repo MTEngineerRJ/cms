@@ -14,6 +14,7 @@ const vehicleDetailsRoute = require("./Routes/vehicleDetailRoutes");
 const reportRoutes = require("./Routes/reportRoutes");
 const feeReportRoutes = require("./Routes/feereportRoute");
 const driverDetailsRoute=require("./Routes/driverDetailRoutes");
+const misSheetRoutes=require("./Routes/misSheetRoutes");
 
 const dotenv = require("dotenv").config();
 
@@ -51,6 +52,8 @@ app.use("/driverDetails",driverDetailsRoute);
 app.use("/report",reportRoutes);
 
 app.use("/fee",feeReportRoutes);
+
+app.use("/mis",misSheetRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, this is your Express server!');

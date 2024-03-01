@@ -178,7 +178,7 @@ const Servey = ({
     
     console.log("accident",accident);
     console.log("CauseOfAccident",CauseOfAccident)
-    setCauseOfAccident(CauseOfAccident !=="undefined"? CauseOfAccident : accident)
+    setCauseOfAccident(CauseOfAccident ? CauseOfAccident : accident)
     setAssessment(Assessment ? Assessment : assessment)
     setThirdPartyLoss(ThirdPartyLoss ? ThirdPartyLoss : other)
     setPoliceAction(PoliceAction ? PoliceAction : other)
@@ -561,9 +561,8 @@ const Servey = ({
                 </div>
                 <div className="col-lg-7">
                   <input
-                    disabled={!isEditMode}
+                    readOnly={!isEditMode}
                     type="date"
-                    disable={!isEditMode}
                     value={
                       InspectionDate && InspectionDate !== "null"
                         ? InspectionDate
@@ -603,9 +602,8 @@ const Servey = ({
                 />*/}
 
                 <input
-                  disabled={!isEditMode}
+                  readOnly={!isEditMode}
                   type="text"
-                  disable={!isEditMode}
                   value={
                     SurveyConductedDate && SurveyConductedDate !== "null"
                       ? SurveyConductedDate
@@ -711,7 +709,7 @@ const Servey = ({
           <div className="row">
             <div className="">
             <ReactEditor
-            index={3}
+            index={9}
               readOnly={!isEditMode}
               editorContent={DetailsOfLoads}
               setEditorContent={setDetailsOfLoads}

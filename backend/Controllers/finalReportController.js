@@ -170,7 +170,7 @@ const updateFinalReport = (req,res)=>{
     IDV='${IDV}',
     MailRecieveDate='${MailRecieveDate}',
     HPA='${HPA}',
-    AddedDateTime = '${SurveyAllotmentDate}',
+    AddedDateTime = '${AddedDateTime}',
     TotalLoss = ${(TotalLoss) ? 1 : 0},
     IMT = ${(IMT) ? 1 : 0}
     WHERE LeadID = ${leadId};
@@ -312,7 +312,7 @@ const updateFinalReport = (req,res)=>{
           DepreciationOnParts='${DepreciationOnParts}',
           NetAssessedAmount='${NetAssessedAmount}',
           SavageDepreciationDetails='${SavageDepreciationDetails}',
-          CashLess='${CashLess}',
+          CashLess=${CashLess?1:0},
           NoteOfSelf='${NoteOfSelf}',
           RepairAutoDate='${RepairAutoDate}',
           RepairCompletionDate='${RepairCompletionDate}',

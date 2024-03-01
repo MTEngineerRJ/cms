@@ -726,14 +726,12 @@ const Summary = ({
                 <div className="col-lg-12 my_profile_setting_input form-group"></div>
                 <div className="col-lg-12">
                   <div className="">
-                    <ReactEditor style={{ height: "100px" }}
-                     editorContent={FinalReportNotes}
-                     setEditorContent={
-                      setFinalReportNotes}
-                      index={100}
-                      readOnly={!isEditMode                                                   }
-                       />
-
+                    <ReactEditor 
+                    index={10}
+                  readOnly={!isEditMode}
+                  editorContent={FinalReportNotes}
+                  setEditorContent={setFinalReportNotes}
+                />
                   </div>
                 </div>
               </div>
@@ -755,7 +753,7 @@ const Summary = ({
                   type="checkbox"
                   value={CashLess}
                   readOnly={!isEdit}
-                  onChange={(e)=>setCashLess(!CashLess)}
+                  onChange={(e)=>setCashLess(1-CashLess)}
                   // value={row.gst}
                   // onChange={(e) => handleChange(index, row.gst + 1, "gst")}
                   id="remeberMe"

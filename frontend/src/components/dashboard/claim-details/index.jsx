@@ -73,7 +73,7 @@ const Index = ({}) => {
   const [inspectionType, setInspectionType] = useState("Final");
 
   const [documents, setDocuments] = useState([]);
-  const [phoneNumber, setPhoneNumber] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [ClaimNumber, setClaimNumber] = useState("");
 
   const [VehicleModel, setVehicleModel] = useState("");
@@ -650,6 +650,19 @@ const Index = ({}) => {
 
   const [isClaimLoading, setIsClaimLoading] = useState(false);
 
+  function convertAndFormatDate(inputDate) {
+    // Remove leading whitespaces, if any
+    const trimmedDate = inputDate
+  
+    // Convert the date string to a Date object
+    const dateObject = new Date(trimmedDate);
+  
+    // Format the date to "dd/mm/yyyy"
+    const formattedDate = dateObject.toLocaleDateString('en-GB');
+  
+    return formattedDate;
+  }
+
   const onSaveHandler = (APItype, func, func2) => {
     const type = calculateTheUpdateType(APItype);
 
@@ -770,13 +783,13 @@ const Index = ({}) => {
       Mobile,
       Address,
       RtoName,
-      ValidUpto,
+      ValidUpto:ValidUpto?convertAndFormatDate(ValidUpto):"",
       Vov,
       Photo,
       Pht,
-      DateOfBirth,
+      DateOfBirth:DateOfBirth?convertAndFormatDate(DateOfBirth):"",
       ClassOfVehicle,
-      DateOfIssue,
+      DateOfIssue:DateOfIssue?convertAndFormatDate(DateOfIssue):"",
       SeatingCapacity: VehicleSeatingCapacity,
       IsDriverDetailsFetched,
       IsRcDetailsFetched,

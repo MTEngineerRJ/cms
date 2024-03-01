@@ -11,7 +11,10 @@ const CreateList = ({ allInfo, leadID }) => {
   const [inspectionType, setInspectionType] = useState("");
 
   const [Bill, setBill] = useState("");
-  const [date, setDate] = useState("");
+  const currentDate = new Date();
+const formattedDate = currentDate.toLocaleDateString('en-GB');
+console.log(formattedDate)
+  const [date, setDate] = useState(new Date());
   const [Insurer, setInsurer] = useState("");
   const [Branch, setBranch] = useState("");
   const [Others, setOthers] = useState("");
@@ -273,7 +276,7 @@ const CreateList = ({ allInfo, leadID }) => {
       Sgst: SGST,
       Total: NetPay,
       ModeOfPayement: "",
-      BillID: generateRegion(allInfo?.otherInfo[0]?.Region),
+      BillID: allInfo?.feesDetails?.BillID,
       FeebasedOn: DetailsFee,
       Remrk: DetailsRemark,
       KmRate: DetailsKM,
@@ -388,11 +391,8 @@ const CreateList = ({ allInfo, leadID }) => {
   const formatDate = (dateString) => {
     const options = {
       year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
+      month: "2-digit",
+      day: "2-digit"
     };
 
     const formattedDate = new Date(dateString).toLocaleString("en-US", options);
@@ -422,7 +422,7 @@ const CreateList = ({ allInfo, leadID }) => {
                   type="text"
                   className="form-control"
                   id="broker_mail_id"
-                  value={generateRegion(allInfo?.otherInfo[0]?.Region)}
+                  value={(allInfo?.feesDetails?.BillID)}
                 />
               </div>
               <div className="col-lg-1 my_profile_setting_input form-group">
@@ -438,12 +438,14 @@ const CreateList = ({ allInfo, leadID }) => {
                 </label>
               </div>
               <div className="col-lg-4">
-                <MyDatePicker
+                <
+                  input
                   type="date"
+                  disable={false}
                   className="form-control"
                   id="broker_mail_id"
-                  selectedDate={date ? FormData(date) : new Date()}
-                  setSelectedDate={setDate}
+                  value={new Date(date)}
+                  onChange={(e)=>setDate(e.target.value)}
                 />
               </div>
             </div>
@@ -505,7 +507,7 @@ const CreateList = ({ allInfo, leadID }) => {
 
          
 
-          {/* <div className="col-lg-12">
+           <div className="col-lg-12">
             <div className="row mt-1">
               <div className="col-lg-2 my_profile_setting_input form-group">
                 <label
@@ -544,7 +546,7 @@ const CreateList = ({ allInfo, leadID }) => {
                 </select>
               </div>
             </div>
-          </div> */}
+          </div> 
           <div className="col-lg-12">
             <div className="row mt-1">
               <div className="col-lg-2 my_profile_setting_input form-group">

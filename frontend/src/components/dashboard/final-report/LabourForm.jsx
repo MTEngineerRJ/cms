@@ -257,7 +257,7 @@ const LabourForm = ({
                     type="text"
                     className="form-control"
                     id="propertyTitle"
-                    value={currentGst ? currentGst : 18}
+                    value={currentGst }
                     onChange={(e) => {
                       setCurrentGST(e.target.value);
                     }}

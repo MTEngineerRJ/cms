@@ -120,10 +120,17 @@ const Index = () => {
     if (userInfo === "") {
       router.push("/login");
     } else {
-      // console.log(userInfo[0].Token)
+      const { Region1, Region2, Region3, CalimStatus } = userInfo[0];
+      console.log(userInfo[0])
       toast.loading("Fetching all the claims!!");
       axios
         .get("/api/getAllClaims", {
+          params: {
+            Region1,
+            Region2,
+            Region3,
+            CalimStatus,
+          },
           headers: {
             Authorization: `Bearer ${userInfo[0]?.Token}`,
             "Content-Type": "application/json",

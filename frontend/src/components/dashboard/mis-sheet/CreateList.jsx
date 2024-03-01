@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-const CreateList = ({ setSearchInput, setType }) => {
+const CreateList = ({ setSearchInput, setType, 
+  changeHandler,
+  setStart,
+  setEnd,
+  reloadHandler,
+start,
+end }) => {
   const [currentType, setCurrentType] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   const handleInputChange = (value, type) => {
@@ -8,7 +14,10 @@ const CreateList = ({ setSearchInput, setType }) => {
     setSearchValue(value);
   };
 
-  const searchHandler = () => {
+
+  const searchHandler = ({
+   
+  }) => {
     setType(currentType);
     setSearchInput(searchValue);
   };
@@ -75,6 +84,8 @@ const CreateList = ({ setSearchInput, setType }) => {
                   type="date"
                   className="form-control"
                   id="propertyTitle"
+                  value={start}
+                  onChange={(e)=>setStart(e.target.value)}
                   placeholder="Enter Reference No."
                 />
               </div>
@@ -92,6 +103,8 @@ const CreateList = ({ setSearchInput, setType }) => {
                   type="date"
                   className="form-control"
                   id="propertyTitle"
+                  value={end}
+                  onChange={(e)=>setEnd(e.target.value)}
                   placeholder="Enter Reference No."
                 />
               </div>
@@ -101,7 +114,17 @@ const CreateList = ({ setSearchInput, setType }) => {
             <div className="my_profile_setting_input">
               <button
                 className="btn float-end btn-color mt-0"
-                onClick={searchHandler}
+                onClick={reloadHandler}
+              >
+                Reload
+              </button>
+            </div>
+          </div>
+          <div className="col-lg-1">
+            <div className="my_profile_setting_input">
+              <button
+                className="btn float-end btn-color mt-0"
+                onClick={changeHandler}
               >
                 Save
               </button>

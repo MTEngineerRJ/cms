@@ -272,17 +272,20 @@ const getDocuments = (req, res) => {
 
  const uploadMedia = async(req, res) => {
   try {
-    console.log("Dataaaaaaaaaaaa", req.body);
-    const { file: filesData, name } = req.body; // Use a different name for the file data
+    const {file,name}=req.body;
+    const filesData = file;
+    const nameInfo = name;
+
+  
     const results = [];
   
 
     for (let i = 0; i < filesData.length; i++) {
       const fileData = filesData[i]; // Use a different name for the loop iteration
-      const fileName = name[i];
+      const fileName = nameInfo[i];
 
       // Check if the file data starts with "data:image/"
-      if (fileData.startsWith("data:image/")) {
+      if (fileData.startsWith("data:image/") || fileData.startsWith("'data:application/pdf")) {
         const data = await uploadToAWS(fileData, fileName);
         results.push(data);
       } else if (fileData.startsWith("data:video/")) {
@@ -299,6 +302,7 @@ const getDocuments = (req, res) => {
         continue;
       }
     }
+    console.log("result",results);
     return res.status(200).json({ data: results });
   } catch (error) {
     console.log("Error log", error);

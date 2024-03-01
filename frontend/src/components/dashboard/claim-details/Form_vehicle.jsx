@@ -110,7 +110,7 @@ const Form_vehicle = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {MakerModel}
+                        {MakerModel && MakerModel!=="null" ? MakerModel : ""}
                       </label>
                     </div>
                   </div>
@@ -137,7 +137,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {VehicleRegisteredNumber}
+                      {VehicleRegisteredNumber&&VehicleRegisteredNumber!=="null"?VehicleRegisteredNumber:""}
                     </label>
                   </div>
                 </td>
@@ -196,7 +196,7 @@ const Form_vehicle = ({
                           fontWeight: "bold",
                         }}
                       >
-                        {VehicleRegisteredOwner}
+                        {VehicleRegisteredOwner && VehicleRegisteredOwner!=="null"?VehicleRegisteredOwner:""}
                       </label>
                     </div>
                   </div>
@@ -225,7 +225,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {DateRegistration ? formatDate(DateRegistration) : ""}
+                      {DateRegistration && DateRegistration!=="null" ? formatDate(DateRegistration) : ""}
                     </label>
                   </div>
                 </td>
@@ -281,7 +281,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {EngineNumber}
+                      {EngineNumber&&EngineNumber!=="null"?EngineNumber:""}
                     </label>
                   </div>
                 </td>
@@ -308,7 +308,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {VehicleChassisNumber}
+                      {VehicleChassisNumber&&VehicleChassisNumber!=="null"?VehicleChassisNumber:""}
                     </label>
                   </div>
                 </td>
@@ -337,7 +337,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {MakerDesc}
+                      {MakerDesc&&MakerDesc!=="null"?MakerDesc:""}
                     </label>
                   </div>
                 </td>
@@ -363,7 +363,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {MakerModel}
+                      {MakerModel&&MakerModel!=="null"?MakerModel:""}
                     </label>
                   </div>
                 </td>
@@ -389,7 +389,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {ManufactureMonthYear}
+                      {ManufactureMonthYear&&ManufactureMonthYear!=="Null"?ManufactureMonthYear:""}
                     </label>
                   </div>
                 </td>
@@ -418,7 +418,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {CubicCapacity}
+                      {CubicCapacity&&CubicCapacity!=="null"?CubicCapacity:""}
                     </label>
                   </div>
                 </td>
@@ -444,7 +444,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {VehicleSeatingCapacity}
+                      {VehicleSeatingCapacity&&VehicleSeatingCapacity!=="null"?VehicleSeatingCapacity:""}
                     </label>
                   </div>
                 </td>
@@ -470,7 +470,8 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {claim?.vehicleOnlineDetails?.PermanentAddress}
+                      {claim?.vehicleOnlineDetails?.PermanentAddress&&claim?.vehicleOnlineDetails?.PermanentAddress!=="null"?
+                      claim?.vehicleOnlineDetails?.PermanentAddress:""}
                     </label>
                   </div>
                 </td>
@@ -525,7 +526,8 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {claim?.vehicleOnlineDetails?.VehicleClassDescription}
+                      {claim?.vehicleOnlineDetails?.VehicleClassDescription && claim?.vehicleOnlineDetails?.VehicleClassDescription!=="null"?
+                      claim?.vehicleOnlineDetails?.VehicleClassDescription:""}
                     </label>
                   </div>
                 </td>
@@ -552,7 +554,7 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {PasiaModelCode}
+                      {PasiaModelCode&&PasiaModelCode!=="null"?PasiaModelCode:""}
                     </label>
                   </div>
                 </td>
@@ -578,7 +580,8 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {claim?.vehicleDetails?.VehicleInsuranceCompany}
+                      {claim?.vehicleDetails?.VehicleInsuranceCompany&&claim?.vehicleDetails?.VehicleInsuranceCompany!=="null"?
+                      claim?.vehicleDetails?.VehicleInsuranceCompany:""}
                     </label>
                   </div>
                 </td>
@@ -714,7 +717,8 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {claim?.vehicleDetails?.VehicleType}
+                      {claim?.vehicleDetails?.VehicleType&&claim?.vehicleDetails?.VehicleType!=="null"?
+                      claim?.vehicleDetails?.VehicleType:""}
                     </label>
                   </div>
                 </td>
@@ -796,7 +800,8 @@ const Form_vehicle = ({
                         fontWeight: "bold",
                       }}
                     >
-                      {VehicleFuelType}
+                      {VehicleFuelType&&VehicleFuelType!=="null"?
+                      VehicleFuelType:""}
                     </label>
                   </div>
                 </td>

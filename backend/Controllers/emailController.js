@@ -24,6 +24,7 @@ const createToken = require("../Config/generateJWTToken");
  const sendEmail1 = (req, res) => {
     const { vehicleNo, PolicyNo, Insured, Date, leadId, toMail , type } = req.body;
 
+    console.log(req.body);
 
     const sql = "SELECT * FROM ClaimStatus WHERE LeadId =?";
     db.query(sql, [leadId], (err, result) => {
@@ -79,7 +80,8 @@ const createToken = require("../Config/generateJWTToken");
         const mailOptions = {
           from: "infosticstech@gmail.com",
           to: toMail,
-          subject: "Survey Request for Vehicle Claim",
+          subject: `Survey Request for Claim of
+          Vehicle Number - ${vehicleNo} A/c ${Insured} policy Number - ${PolicyNo}`,
           text: emailContent,
         };
   

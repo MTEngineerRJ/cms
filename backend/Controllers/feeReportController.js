@@ -32,64 +32,6 @@ const db = require("../Config/dbConfig");
   BillDate
     } = req.body;
 
-  
-
-    const insertQuery = `
-    INSERT INTO BillReportFees(
-      LeadId,
-      Type,
-      ProfessionalFees,
-      TotalKM,
-      Visits,
-      Conveyance,
-      Photos,
-      Charge,
-      Photos_cd,
-      Cgst,
-      Igst,
-      Sgst,
-      Total,
-      BillID,
-      FeebasedOn,
-      Remrk,
-      KmRate,
-      PhotsRate,
-      EstimateAmt,
-      AssessedAmt,
-      InsuranceCompanyName,
-      Branch,
-      BillTo,
-      Others,
-      BillDate
-    ) VALUES (
-      '${LeadId}',
-      '${Type}',
-      '${ProfessionalFees}',
-      '${TotalKM}',
-      '${Visits}',
-      '${Conveyance}',
-      '${Photos}',
-      '${Charge}',
-      '${Photos_cd}',
-      '${Cgst}',
-      '${Igst}',
-      '${Sgst}',
-      '${Total}',
-      '${BillID}',
-      '${FeebasedOn}',
-      '${Remrk}',
-      '${KmRate}',
-      '${PhotsRate}',
-      '${EstimateAmt}',
-      '${AssessedAmt}',
-      '${InsuranceCompanyName}',
-      '${Branch}',
-      '${BillTo}',
-      '${Others}',
-      '${BillDate}'
-    );
-    `;
-      
     const updateQuery = `
   UPDATE BillReportFees
   SET
@@ -178,7 +120,8 @@ const db = require("../Config/dbConfig");
       const accidentDetails = await executeQuery(
         "SELECT * FROM AccidentDetails WHERE LeadID=?",
         [leadId]
-      );
+      );  
+      
       const claimDetails = await executeQuery(
         "SELECT * FROM ClaimDetails WHERE LeadId=?",
         [leadId]
@@ -191,6 +134,7 @@ const db = require("../Config/dbConfig");
         claimDetails,
         vehicleDetails,
         vehicleOnlineDetails,
+        feeDetails,
         accidentDetails : accidentDetails,
       };
 

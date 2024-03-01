@@ -10,7 +10,7 @@ router.get("/getUploadDocuments",uploadController.getReportDocument);
 router.get("/getDocuments",uploadController.getDocuments);
 
 router.post("/uploadClaimMedia",uploadController.uploadClaimMedia);
-
+         
 router.post("/uploadDocument",uploadController.uploadDocument);
 
 router.post("/uploadMedia", uploadController.uploadMedia);

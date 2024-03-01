@@ -140,7 +140,12 @@ function SmartTable(props) {
               />
             </div> */}
             <div className="col-lg-12 mt-3">
-              <CreateList />
+              <CreateList changeHandler={props.changeHandler}
+              setStart={props.setStart}
+              setEnd={props.setEnd}
+              start={props.start}
+              end={props.end}
+              reloadHandler={props.reloadHandler}/>
             </div>
           </div>
           {props.data.length > 0 ? (

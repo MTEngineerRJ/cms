@@ -239,7 +239,7 @@ const Form_01 = ({
                             className="form-control"
                             id="propertyTitle"
                             onChange={(e) => setDriverName(e.target.value)}
-                            value={removeMultipleSpaces(DriverName)}
+                            value={DriverName && DriverName!=="null" ?removeMultipleSpaces(DriverName):""}
                             // placeholder="Enter Registration No."
                           />
                         </div>
@@ -297,7 +297,7 @@ const Form_01 = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={LicenseType}
+                            value={LicenseType&&LicenseType!=="null"?LicenseType:""}
                             onChange={(e) => setLicenseType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -328,7 +328,7 @@ const Form_01 = ({
                             className="form-control"
                             id="propertyTitle"
                             onChange={(e) => setLicenseNumber(e.target.value)}
-                            value={LicenseNumber}
+                            value={LicenseNumber&&LicenseNumber!=="null"?LicenseNumber:""}
                             // placeholder="Enter Registration No."
                           />
                         </div>
@@ -475,7 +475,7 @@ const Form_01 = ({
                         selected={
                           DateOfBirth !== null && !isNaN(new Date(DateOfBirth))
                             ? new Date(DateOfBirth)
-                            : null
+                            : ""
                         }
                         onChange={(date) => setDateOfBirth(date)}
                       />
@@ -536,7 +536,7 @@ const Form_01 = ({
                         selected={
                           DateOfIssue !== null && !isNaN(new Date(DateOfIssue))
                             ? new Date(DateOfIssue)
-                            : null
+                            : ""
                         }
                         onChange={(date) => setDateOfIssue(date)}
                       />
@@ -579,7 +579,7 @@ const Form_01 = ({
                 selected={
                   ValidUpto !== null && !isNaN(new Date(ValidUpto))
                     ? new Date(ValidUpto)
-                    : null
+                    : ""
                 }
                 onChange={(date) => setValidUpto(date)}
               />

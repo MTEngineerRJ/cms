@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Header from "../../common/header/dashboard/Header";
 import SidebarMenu from "../../common/header/dashboard/SidebarMenu_01";
 import MobileMenu from "../../common/header/MobileMenu";
@@ -6,8 +7,61 @@ import MobileMenu from "../../common/header/MobileMenu";
 // import Pagination from "./Pagination";
 // import SearchBox from "./SearchBox";
 import Exemple from "./Exemple";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+// import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const index = () => {
+const Index = () => {
+
+  const convertToYYYYMMDD = (inputDate) => {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  };
+
+  const [allRows,setAllRows]=useState([]);
+  const [startDate,setStartDate]=useState("");
+  const [endDate,setEndDate]=useState("");
+  useEffect(()=>{
+    const userInfo=JSON.parse(localStorage.getItem("userInfo"));
+    const Start = startDate ? convertToYYYYMMDD(startDate):null;
+    const End = endDate ? convertToYYYYMMDD(endDate):null;
+    
+    toast.loading("Fetching the information!!", {
+      // position: toast.POSITION.BOTTOM_LEFT,
+      className: "toast-loading-message",
+    });
+    axios
+    .get("/api/misSheet", {
+      headers: {
+        Authorization: `Bearer ${userInfo[0].Token}`,
+        "Content-Type": "application/json",
+      },
+      params: {
+        startDate: Start,
+        EndDate:End
+      },
+    })
+    .then((res) => {
+      console.log(res.data.userData.misSheetDetails);
+     setAllRows(res.data.userData.misSheetDetails);
+     toast.dismiss();
+     // toast.success("Successfully added");
+     toast.success("Fetched  Successfully !", {
+       // position: toast.POSITION.BOTTOM_LEFT,
+       className: "toast-loading-message",
+     });
+      // toast.success("Successfully Fetched !!")
+    })
+    .catch((err) => {
+      toast.dismiss();
+          toast.error("Got error while fetching Info!");
+    });
+  },[startDate,endDate]);
   return (
     <>
       {/* <!-- Main Header Nav --> */}
@@ -83,7 +137,12 @@ const index = () => {
                     <div className="property_table">
                       <div className="table-responsive mt0">
                         {/* <TableData /> */}
-                        <Exemple />
+                        <Exemple 
+                        allRows={allRows} 
+                        setStartDate={setStartDate} 
+                        setEndDate={setEndDate}
+                        startDate={startDate}
+                        endDate={endDate} />
                       </div>
                       {/* End .table-responsive */}
 
@@ -120,4 +179,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

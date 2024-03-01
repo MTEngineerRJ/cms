@@ -77,6 +77,11 @@ const getBillInfo = async(req,res)=>{
       "CALL GetNewPartsReport(?)",
       [leadId]
     );
+
+    const feesDetails = await executeQuery(
+      "SELECT * FROM BillReportFees WHERE LeadID=?",
+      [leadId]
+    );
    
     const otherInfo = await executeQuery(
       "CALL GetOtherTables(?)",
@@ -89,6 +94,7 @@ const getBillInfo = async(req,res)=>{
       labourDetails,
       newPartsDetails,
       otherInfo,
+      feesDetails,
       VehicleOnlineDetails
     };
 

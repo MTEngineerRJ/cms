@@ -436,7 +436,8 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleRegisteredOwner}
+                            value={VehicleRegisteredOwner&&VehicleRegisteredOwner!=="null"?
+                            VehicleRegisteredOwner:""}
                             onChange={(e) =>
                               setVehicleRegisteredOwner(e.target.value)
                             }
@@ -472,7 +473,7 @@ const Form = ({
                               DateRegistration !== null &&
                               !isNaN(new Date(DateRegistration))
                                 ? new Date(DateRegistration)
-                                : null
+                                : ""
                             }
                             onChange={(date) => setDateRegistration(date)}
                           />
@@ -545,7 +546,7 @@ const Form = ({
                               TransferDate !== null &&
                               !isNaN(new Date(TransferDate))
                                 ? new Date(TransferDate)
-                                : null
+                                : ""
                             }
                             onChange={(date) => setTransferDate(date)}
                           />
@@ -574,7 +575,7 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={EngineNumber}
+                            value={EngineNumber&&EngineNumber!=="null"?EngineNumber:""}
                             onChange={(e) => setEngineNumber(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -634,7 +635,8 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleChassisNumber}
+                            value={VehicleChassisNumber&&VehicleChassisNumber!=="null"?
+                            VehicleChassisNumber:""}
                             onChange={(e) =>
                               setVehicleChassisNumber(e.target.value)
                             }
@@ -666,7 +668,7 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleFuelType}
+                            value={VehicleFuelType&&VehicleFuelType!=="null"?VehicleFuelType:""}
                             onChange={(e) => setVehicleFuelType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -852,7 +854,7 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleFuelType}
+                            value={VehicleFuelType&&VehicleFuelType!=="null"?VehicleFuelType:""}
                             onChange={(e) => setVehicleFuelType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -974,7 +976,7 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={RcVehicleType}
+                            value={RcVehicleType&&RcVehicleType!=="null"?RcVehicleType:""}
                             onChange={(e) => setRcVehicleType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -1102,7 +1104,7 @@ const Form = ({
                               RcInsuranceUpto !== null &&
                               !isNaN(new Date(RcInsuranceUpto))
                                 ? new Date(RcInsuranceUpto)
-                                : null
+                                : ""
                             }
                             onChange={(date) => setRcInsuranceUpto(date)}
                           />

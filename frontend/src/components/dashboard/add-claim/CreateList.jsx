@@ -13,6 +13,7 @@ const CreateList = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumber_01, setPhoneNumber_01] = useState("");
   const [phoneNumber_02, setPhoneNumber_02] = useState("");
+  const [disable,setDisable]=useState(false);
   // const [garageMailAddress,setGarageMailAddress]=useState();
   const router = useRouter();
   //Date
@@ -93,6 +94,7 @@ const CreateList = () => {
   };
 
   const submitHandler = () => {
+    setDisable(true);
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
     const payload = {
@@ -151,7 +153,7 @@ const CreateList = () => {
         .then((res) => {
           toast.dismiss();
           // toast.success("Successfully added");
-          toast.success("Success Notification !", {
+          toast.success("Successfully added !", {
             // position: toast.POSITION.BOTTOM_LEFT,
             className: "toast-loading-message",
           });
@@ -847,7 +849,9 @@ const CreateList = () => {
 
         <div className="col-lg-12">
           <div className="my_profile_setting_input">
-            <button className="btn float-end btn-color" onClick={submitHandler}>
+            <button 
+            disabled={disable}
+            className="btn float-end btn-color" onClick={submitHandler}>
               Submit
             </button>
           </div>

@@ -8,6 +8,8 @@ import CreateList from "./CreateList";
 // import PropertyMediaUploader from "./PropertyMediaUploader";
 
 const Index = () => {
+  const url = window.location.pathname;
+  const leadId=url.split("/print-document/");
   return (
     <>
       {/* <!-- Main Header Nav --> */}
@@ -23,7 +25,7 @@ const Index = () => {
           id="DashboardOffcanvasMenu"
           data-bs-scroll="true"
         >
-          <SidebarMenu />
+          <SidebarMenu  leadId={leadId}/>
         </div>
       </div>
       {/* End sidebar_menu */}
