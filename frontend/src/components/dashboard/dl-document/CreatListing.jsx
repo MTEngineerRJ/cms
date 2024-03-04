@@ -35,6 +35,7 @@ const RCData = ({ DriverDetails }) => {
     "Badge Number":"N.A.",
     "Rto Name":"N.A.",
     "Cov":"N.A.",
+    "Issued Date": "N.A.",
     "Vaild Upto":"N.A."
   };
 
@@ -55,6 +56,7 @@ const rcDetailsUpdated = {
   "License Number": addDefaultValue(DriverDetails?.LicenseNumber),
   "License Type": addDefaultValue(DriverDetails?.LicenseType),
   "Badge Number": addDefaultValue(DriverDetails?.BadgeNumber),
+  "Issued Date": addDefaultValue(DriverDetails?.DateOfIssue),
   "Vaild Upto": addDefaultValue(DriverDetails?.ValidUpto)
     };
 

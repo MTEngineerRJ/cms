@@ -949,67 +949,79 @@ const Index = ({}) => {
           },
         })
         .then((res) => {
-          console.log(res.data.data);
+          console.log( "Documents--------------->",res.data.data);
           const tempList = res.data.data;
           let requiredVideos = [];
+          console.log("requiredDocumenstList",tempList);
           tempList.map((list, index) => {
             if (
-              list.Attribute1.toLowerCase().includes(".mp4") ||
-              list.Attribute1.toLowerCase().includes(".mp3")
+              list.file_name.toLowerCase().includes(".mp4") ||
+              list.file_name.toLowerCase().includes(".mp3")
             ) {
               requiredVideos.push({
-                name: list.Attribute1,
-                url: list.Photo1,
+                name: list.file_name,
+                url: list.doc_url,
               });
             }
-            if (
-              list.Attribute2.toLowerCase().includes(".mp4") ||
-              list.Attribute2.toLowerCase().includes(".mp3")
-            ) {
-              requiredVideos.push({
-                name: list.Attribute2,
-                url: list.Photo2,
-              });
-            }
-            if (
-              list.Attribute3.toLowerCase().includes(".mp4") ||
-              list.Attribute3.toLowerCase().includes(".mp3")
-            ) {
-              requiredVideos.push({
-                name: list.Attribute3,
-                url: list.Photo3,
-              });
-            }
-            if (
-              list.Attribute4.toLowerCase().includes(".mp4") ||
-              list.Attribute4.toLowerCase().includes(".mp3")
-            ) {
-              requiredVideos.push({
-                name: list.Attribute4,
-                url: list.Photo4,
-              });
-            }
-            if (
-              list.Attribute5.toLowerCase().includes(".mp4") ||
-              list.Attribute5.toLowerCase().includes(".mp3")
-            ) {
-              requiredVideos.push({
-                name: list.Attribute5,
-                url: list.Photo5,
-              });
-            }
-            if (
-              list.Attribute6.toLowerCase().includes(".mp4") ||
-              list.Attribute6.toLowerCase().includes(".mp3")
-            ) {
-              requiredVideos.push({
-                name: list.Attribute6,
-                url: list.Photo6,
-              });
-            }
+           
           });
+
+
+          let requiredDocumenstList = [];
+          tempList.map((temp,index)=>{
+            let indexTobeFinded = -1;
+            requiredDocumenstList?.map((doc,idx)=>{
+              if(String(temp.DocumentName)===String(doc.docName)){
+                indexTobeFinded=idx;
+              }
+            })
+
+            if(indexTobeFinded!==-1){
+              const newDocListWithinWhole = requiredDocumenstList[indexTobeFinded];
+              const newDocListWithin = newDocListWithinWhole.data;
+
+              newDocListWithin.push({
+                name:temp.file_name,
+                url:temp.doc_url,
+                location:temp.latitude+","+temp.longitude,
+                Timestamp:temp.timestamp
+              });
+
+              const oldData = requiredDocumenstList;
+              oldData[indexTobeFinded]=newDocListWithin;
+              requiredDocumenstList=oldData;
+            }
+            else{
+              let newDocListWithin = [];
+            
+              // Split the doc_url string into an array of URLs
+              let urlArray = temp.doc_url.split(',');
+            
+              // Split the file_name string into an array of file names
+              let fileNameArray = temp.file_name.split(',');
+            
+              // Iterate over the arrays and push the corresponding values to newDocListWithin
+              for (let i = 0; i < urlArray.length; i++) {
+                newDocListWithin.push({
+                  name: fileNameArray[i],
+                  url: urlArray[i],
+                  location: temp.latitude + "," + temp.longitude,
+                  Timestamp: temp.timestamp
+                });
+              }
+            
+              const oldData = requiredDocumenstList;
+              oldData.push({
+                leadId:temp.LeadId,
+                docName:temp.DocumentName,
+                data:newDocListWithin
+              })
+              requiredDocumenstList=oldData;
+            }
+
+          })
           setVideosList(requiredVideos);
-          setDocuments(res.data.data);
+          setDocuments(requiredDocumenstList);
         })
         .catch((err) => {
           console.log(err);

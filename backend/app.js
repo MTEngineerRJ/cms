@@ -15,11 +15,18 @@ const reportRoutes = require("./Routes/reportRoutes");
 const feeReportRoutes = require("./Routes/feereportRoute");
 const driverDetailsRoute=require("./Routes/driverDetailRoutes");
 const misSheetRoutes=require("./Routes/misSheetRoutes");
+const multer = require("multer");
+
 
 const dotenv = require("dotenv").config();
-
 const port = process.env.PORT || 3006;
 const app = express();
+
+const storage = multer.memoryStorage(); // Store files in memory
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // Set your desired file size limit (e.g., 50MB)
+});
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -41,7 +48,7 @@ app.use("/newParts",newPartsRoute);
 
 app.use("/status",statusRoute);
 
-app.use("/upload",uploadRoute);
+app.use("/upload",upload.array(),uploadRoute);
 
 app.use("/report",reportRoutes);
 

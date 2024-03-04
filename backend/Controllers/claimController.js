@@ -75,7 +75,18 @@ const addClaim =  (req, res) => {
         ${parseInt(IsActive)}
       );
     `;
+    
+  const generateReference = (leadId) => {
+      const firstThreeLetters = Region?.slice(0, 3);
   
+      const now = new Date();
+      const yy = String(now.getFullYear()).slice(-2);;
+      const mm = String(now.getMonth() + 1).padStart(2, "0"); // Adding 1 because months are zero-indexed
+      const result = `${firstThreeLetters}/${yy}-${mm}/${leadId}`;
+  
+      return result;
+    };
+    
     db.query(insertClaimDetails, (error, results) => {
       if (error) {
         console.error("Error inserting data into ClaimDetails:", error);
@@ -95,7 +106,15 @@ const addClaim =  (req, res) => {
           }
           console.log(results);
           const addLeadId = results[0].LeadId;
-  
+          //   const ReferenceNo=  generateReference(addLeadId)
+          // const update_query = `UPDATE ClaimDetails SET ReferenceNo = '${ReferenceNo}' where LeadID=${addLeadId}`
+          // db.query(update_query, (error, results) => {
+          //   if (error) {
+          //     console.error("Error updating data into Reference Number:", error);
+          //     return res
+          //       .status(500)
+          //       .json({ error: "Error updating data into Reference Number." });
+          //   }})
           const insertVehicleDetails = `
       INSERT INTO VehicleDetails (
         RegisteredNumber,
@@ -882,17 +901,18 @@ const getSpecificClaim = async (req, res) => {
 
   const getClaimDetails = (req, res) => {
     const { token, leadId } = req.body;
-    res.status(200).send("Successfully found!!");
-    // const sql = "SELECT Token FROM ClaimDetails WHERE LeadId =?";
+      res.status(200).send("Successfully found!!");
+    const sql = "SELECT InsuredToken FROM ClaimDetails WHERE LeadId =?";
     // db.query(sql, [leadId], (err, result2) => {
     //   if (err) {
     //     console.error(err);
     //     res.status(500).send("Internal Server Error");
     //     return;
     //   }
-    //   if (result2[0]?.Token === token) {
+    //   console.log(result2);
+    //   if (result2[0]?.InsuredToken === token) {
     //     // console.log(result2[0].Token === token);
-          //  res.status(200).send("Successfully found!!");
+    //        res.status(200).send("Successfully found!!");
        
     //   } else {
     //     res.status(403).send("Forbidden Access!");

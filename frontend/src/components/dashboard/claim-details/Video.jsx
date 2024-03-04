@@ -22,6 +22,7 @@ const Video = ({ videos }) => {
     setOpen(false);
   };
 
+  console.log("videos",videos);
   const handleCaptureSnapshot = async () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -182,7 +183,7 @@ const Video = ({ videos }) => {
                                   crossOrigin="anonymous"
                                 >
                                   <source
-                                    src={videos[selectedVideo].url}
+                                    src={videos[selectedVideo]?.url}
                                     type="video/mp4"
                                   />
                                   Your browser does not support the video tag.

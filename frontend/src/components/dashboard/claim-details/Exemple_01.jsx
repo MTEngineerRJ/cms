@@ -350,6 +350,7 @@ export default function Exemple({ leadId }) {
         },
       })
       .then((res) => {
+        console.log("Responseeeeeeeeee",res.data);
         setAllDocs(res.data.data.results);
       })
       .catch((err) => {
@@ -419,7 +420,7 @@ export default function Exemple({ leadId }) {
     setUploadedData(temp);
   }, [allDocs, change]);
 
-  console.log(uploadedData);
+  console.log('uploadedData',uploadedData);
 
   return (
     <SmartTable

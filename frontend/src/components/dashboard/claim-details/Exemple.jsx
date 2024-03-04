@@ -1,11 +1,26 @@
-  import Link from "next/link";
-  import SmartTable from "./SmartTable";
+import SmartTable from "./SmartTable";
   import { useEffect, useState } from "react";
   import JSZip from "jszip";
-  import { FaCross, FaDropbox, FaRedo, FaUpload } from "react-icons/fa";
+  import {  FaUpload } from "react-icons/fa";
   import axios from "axios";
-import toast from "react-hot-toast";
-  // import { useParams } from 'next/navigation'
+  import toast from "react-hot-toast";
+  import AWS from 'aws-sdk';
+
+
+  AWS.config.update({
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+    region: process.env.NEXT_PUBLIC_REGION,
+  });
+  
+  const S3_BUCKET = process.env.NEXT_PUBLIC_S3_BUCKET;
+  
+  const REGION ='ap-south-1';
+  console.log("AWS credentials:", process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID, process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY);
+  console.log("AWS region:", process.env.NEXT_PUBLIC_REGION);
+  console.log("S3 bucket:", S3_BUCKET);
+  const myBucket= new AWS.S3({params:{Bucket:S3_BUCKET},region:REGION});
+
   const headCells = [
     {
       id: "serial_num",
@@ -368,11 +383,21 @@ import toast from "react-hot-toast";
     const [updatedCode, setUpdatedCode] = useState([]);
     const [selectedFile, setSelectedFile] = useState([]);
     const [uploadedFiles,setUploadedFiles]=useState([]);
+    const [disable,setDisable]=useState(false)
 
+   
     const [currentDoc,setCurrentDoc]=useState("");
+
+    const [changes,setChanges]=useState(false);
+
+    const [loc,setLoc]=useState("")
 
     console.log("leadId------>", leadId);
 
+  
+  useEffect(()=>{
+    setUploadedFiles(documents)
+  },[documents]);
 
   const checkValue = (label) => {
     let requiredInfo = [];
@@ -413,17 +438,29 @@ import toast from "react-hot-toast";
       })
     }
     
+
+    const getAllLabelLinks = (docName)=>{
+      let requiredLinks=[];
+      uploadedFiles.map((file,index)=>{
+        if(String(docName)===String(file.docName)){
+          requiredLinks=file.data;
+        }
+      })
+      return requiredLinks;
+    }
   // console.log("selectedFile-------->",selectedFile);
     
   
   const getIndex = (docName,fileData)=>{
     let index = -1;
-    console.log(docName,fileData);
+    console.log("getIndex",docName,fileData);
     fileData.map((file,idx)=>{
+      console.log(String(docName) === String(file.docName));
       if(String(docName) === String(file.docName)){
         index=idx;
       }
     })
+    console.log(index);
     return index;
   }
 
@@ -441,6 +478,28 @@ import toast from "react-hot-toast";
     return filename;
 }
 
+const location = () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLoc(latitude + "," + longitude);
+        console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        // You can use the latitude and longitude here as needed
+      },
+      (error) => {
+        console.error("Error getting location:", error.message);
+      }
+    );
+  } else {
+    console.error("Geolocation is not supported by this browser");
+  }
+};
+
+
+
+location();
+
 let docCurrentName="Driving license";
 useEffect(()=>{
   setCurrentDoc(docCurrentName)
@@ -448,109 +507,137 @@ useEffect(()=>{
 
   const handleFileInputChange = async (e, idx,docs)  => {
    
-    console.log("idx------------>",idx,currentDoc,docCurrentName);
+    location();
+    
+    setDisable(true);
    
     const selectedFileCurrent = e.target.files[idx];
-    let oldFiles = selectedFile;
-    let currentIndex = oldFiles.findIndex((file) => file.index === idx);
-    let newFile = {
-      file: selectedFileCurrent,
-      index: currentIndex !== -1 ? currentIndex : idx,
-      base64: "",
-    };
-  
-  //   let oldFiles = selectedFile;
-  //   let currentIndex = oldFiles.findIndex((file) => file.index === idx);
-  
-  //   let newFile = {
-  //     file: selectedFileCurrent,
-  //     index: currentIndex !== -1 ? currentIndex : idx,
-  //     base64: "",
-  //   };
-  
-    reader.readAsDataURL(selectedFileCurrent);
-  
-    setTimeout(async () => {
-      if (newFile) {
-        const payload = {
-          file: [newFile.base64],
-          name: [newFile.file.name],
-        };
+    
+      const params = {
+        ACL:'public-read',
+        Body:selectedFileCurrent,
+        Bucket:S3_BUCKET,
+        Key:selectedFileCurrent.name,
+        ContentType: 'image/jpeg',
+        ContentDisposition: 'inline'
+      };
 
-   
-        toast.loading("Uploading file!");
-          axios.post("/api/uploadFile", payload)
-          .then((res)=>{
+     
+      myBucket.putObject(params).send((err,data)=>{
+        if(err){
+          toast.error("Error while uploading!!");
+        }
+        else{
+          const S3_URL = `https://${S3_BUCKET}.s3.${REGION}.amazonaws.com/${encodeURIComponent(selectedFileCurrent.name)}`;
+          
+          const payloadMain={
+            leadId:leadId,
+            docName:docCurrentName,
+            data:[{
+              name:selectedFileCurrent.name,
+              url:S3_URL,
+              Timestamp:new Date(),
+              Location:loc
+            }]
+          };
 
-            toast.dismiss();
-            toast.success("Sucessfully uploaded!");
-            
-            let oldFiles = uploadedFiles;
+        
+          toast.loading("Uploading files!!", {
+            className: "toast-loading-message",
+          });
+          axios.post("/api/uploadDocument", payloadMain, {
+              headers: {
+                Authorization: `Bearer ${""}`,
+                "Content-Type": "application/json",
+              },
+            })
+            .then((res) => {
+              toast.dismiss()
+              toast.success("Successfully updated !", {
+                // position: toast.POSITION.BOTTOM_LEFT,
+                className: "toast-loading-message",
+              });
+              let oldFiles = uploadedFiles;
 
-            const index = getIndex(docCurrentName,oldFiles);
-            console.log("index",index);
-
-            if(index!==-1){
-                const oldFiles = oldFiles[index];
-                const oldData = oldFiles.data;
-                oldData.push({
-                  name:getFileNameFromUrl(res.data.userData),
-                  url:res.data.userData
-                });
+              const index = getIndex(docCurrentName,oldFiles);
+              const currentTimeStamp=new Date();
+  
+              if(index!==-1){
+                  const oldFile = oldFiles[index];
+                  const oldData = oldFile.data;
+                  oldData.push({
+                    name:getFileNameFromUrl(S3_URL),
+                    url:res.data.userData,
+                    Timestamp:currentTimeStamp,
+                    Location: loc
+  
+                  });
+                  const newUpload={
+                    leadId:leadId,
+                    docName:docCurrentName,
+                    data:oldData,
+                   
+                  }
+                  oldFiles[index]=newUpload;
+                  console.log(oldFiles);
+                  setChanges(true)
+                  setUploadedFiles(oldFiles);
+              }
+              else{
+  
+                let newData = [];
+                newData.push({
+                  name:getFileNameFromUrl(S3_URL),
+                  url:S3_URL,
+                  Timestamp:currentTimeStamp,
+                  Location: loc,
+                  
+                })  
                 const newUpload={
                   leadId:leadId,
                   docName:docCurrentName,
-                  data:oldData
+                  data:newData
                 }
-                oldFiles[index]=newUpload;
+                const oldFiles = uploadedFiles;
+                oldFiles.push(newUpload);
                 console.log(oldFiles);
+                setChanges(true)
                 setUploadedFiles(oldFiles);
-            }
-            else{
-
-              let newData = [];
-              newData.push({
-                name:getFileNameFromUrl(res.data.userData),
-                url:res.data.userData
-              })
-              const newUpload={
-                leadId:leadId,
-                docName:docCurrentName,
-                data:newData
               }
-              const oldFiles = uploadedFiles;
-              oldFiles.push(newUpload);
-              console.log(oldFiles);
-              setUploadedFiles(oldFiles);
-            }
-          })
-          .catch((err)=>{
-            toast.error(err);
-          })
+            })
+            .catch((err) => {
+              // isNotValidLink(true);
+              toast.dismiss()
+              toast.error("Try Again!!")
+            });
+         
+      
+            
+          
+          
+
         }
-    }, 1000);
+      })
+
+       
+        
+    setDisable(false)
   };
 
   
-  
-  console.log(uploadedFiles);
-
-  
-// console.log("selectedFile-------->",selectedFile);
   
 const handleReload = () => {
   window.location.reload();
 };
 
 
-
-
-//     const handleButtonClick = (doc_name) => {
-//       console.log(doc_name)
-//       docCurrentName =(doc_name)
-//       // Trigger file input click when button is clicked
-//       document.getElementById('fileInput').click();
-//     };
+    const handleButtonClick = (doc_name) => {
+      setDisable(true)
+      console.log(doc_name)
+      docCurrentName =(doc_name)
+      // Trigger file input click when button is clicked
+      document.getElementById('fileInput').click();
+    };
 
 //       try {
 //         const zip = new JSZip();
@@ -618,46 +705,106 @@ const getFileName = (idx)=>{
     return currentIndex
   }
 
-  const handleButtonClick = () => {
-    // Trigger file input click when button is clicked
-    document.getElementById('fileInput').click();
+  const types = [
+    { name: "Driving licence" },
+    { name: "Certificate of registration" },
+    { name: "Repair Estimate" },
+    { name: "Claim form" },
+    { name: "Insurance policy" },
+    { name: "Damage vehicle photographs/video" },
+    { name: "Aadhar card" },
+    { name: "Pan card" },
+    { name: "Cancel cheque" },
+    { name: "Satisfaction voucher" },
+    { name: "Discharge voucher" },
+    { name: "Dismantle photographs" },
+    { name: "Reinspection photographs" },
+    { name: "Repair Invoice" },
+    { name: "Payment/cash receipt" },
+  ];
+
+  const onSubmitHandler = () => {
+    setDisable(true);
+
+      const tempArray = [];
+      uploadedFiles.map((file, index) => {
+        const data = file.data;
+
+        const uploadData = [];
+        data?.map((temp,idx)=>{
+          if(temp?.upload && temp.upload === true){
+            uploadData.push({
+              name:temp.name,
+              url:temp.url,
+              Timestamp:temp.Timestamp,
+              Location:temp.Location
+            })
+          }
+        });
+
+        if(uploadData.length > 0){
+          tempArray.push({
+            leadId:file.leadId,
+            docName:file.docName,
+            data:uploadData
+          });
+        }
+      });
+
+      if(tempArray.length<=0){
+        toast.error("No Data to be uploaded!!");
+      }
+      else{
+      const payload = JSON.stringify({ data: tempArray });
+
+      toast.loading("Uploading files!!", {
+        // position: toast.POSITION.BOTTOM_LEFT,
+        className: "toast-loading-message",
+      });
+      axios.post("/api/uploadDocument", payload, {
+          headers: {
+            Authorization: `Bearer ${""}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          toast.dismiss()
+          toast.success("Successfully updated !", {
+            // position: toast.POSITION.BOTTOM_LEFT,
+            className: "toast-loading-message",
+          });
+          window.location.reload();
+        })
+        .catch((err) => {
+          // isNotValidLink(true);
+          toast.dismiss()
+          toast.error("Try Again!!")
+        });
+        
+
+      }
+      setDisable(false)
+    
   };
+
+
 
   const downloadAllFiles = async () => {
     try {
       const zip = new JSZip();
 
-    
-    
 
-      documents.map((data, index) => {
-        if (data.Attribute1 !== "") {
-          const fileName = data.Attribute1;
-          zip.file(fileName, data.Photo1, { binary: true });
-        }
-        if (data.Attribute2 !== "") {
-          const fileName = data.Attribute2;
-          zip.file(fileName, data.Photo2, { binary: true });
-        }
-        if (data.Attribute3 !== "") {
-          const fileName = data.Attribute3;
-          zip.file(fileName, data.Photo3, { binary: true });
-        }
-        if (data.Attribute4 !== "") {
-          const fileName = data.Attribute4;
-          zip.file(fileName, data.Photo4, { binary: true });
-        }
-        if (data.Attribute5 !== "") {
-          const fileName = data.Attribute5;
-          zip.file(fileName, data.Photo5, { binary: true });
-        }
-      });
-
-      // console.log(zip);
-
+      uploadedFiles.map((file,index)=>{
+        const data = file.data;
+        const currentDocName = file.docName;
+        data.map((docFile,idx)=>{
+          const fileName=docFile.name;
+          const path = docFile.url;
+          zip.file(currentDocName+"_"+fileName, path, { binary: true });
+        })
+      })
       const content = await zip.generateAsync({ type: "blob" });
 
-      // Triggering the download
       const a = document.createElement("a");
       const url = URL.createObjectURL(content);
       a.href = url;
@@ -667,30 +814,35 @@ const getFileName = (idx)=>{
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      alert("Successfully downloaded the zip!");
+      toast.success("Successfully downloaded the zip!");
     } catch (error) {
       console.error("Error during download:", error);
-      alert("Error during download. Please try again.");
+      toast.error("Error during download. Please try again.");
     }
   };
 
 
 
+
+
   let tempCode = [];
   useEffect(() => {
+    setChanges(false)
     data.map((docs, index) => {
-      const allInfo = checkValue(docs.doc_name);
+      const allInfo = getAllLabelLinks(docs.doc_name);
       const fileName = getFileName(index);
+      console.log(docs.doc_name,allInfo)
       const alllinks = (
         <div style={{ display: "flex", flexDirection: "column" }}>
           {allInfo?.map((info, idx) => (
             <a href={info.url} key={idx} target="_blank">
-              {info.name}
+              {decodeURIComponent((info.name))}
             </a>
           ))}
         </div>
       );
 
+      console.log("alllinks",alllinks);
       const temp = {
         _id: docs._id,
         serial_num: docs.serial_num,
@@ -698,7 +850,7 @@ const getFileName = (idx)=>{
         file: alllinks,
         action: <>
         <input type="file" id="fileInput" style={{ display: 'none' }} onChange={(e)=>handleFileInputChange(e,index,docs.doc_name)} ></input>
-        <button className="btn btn-thm" onClick={handleButtonClick}
+        <button  disabled={disable} className="btn btn-thm" onClick={()=>handleButtonClick(docs.doc_name)}
         >
         <FaUpload /></button>
         <p>{ fileName? `Selected File: ${fileName?.name}` : "Choose File"}</p>
@@ -712,18 +864,16 @@ const getFileName = (idx)=>{
     });
     // data = tempCode;
     setUpdatedCode(tempCode);
-  }, [documents]);
-
-
-
-  console.log("updatedCode><><><",updatedCode)
+  }, [documents,uploadedFiles,changes]);
 
     return (
       <SmartTable
         title="Customer Documents"
         data={updatedCode}
         headCells={headCells}
+        disable={disable}
         downloadAllFiles={downloadAllFiles}
+        onSubmitHandler={onSubmitHandler}
       />
     );
   }
