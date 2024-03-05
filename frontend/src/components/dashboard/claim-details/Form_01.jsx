@@ -68,9 +68,9 @@ const Form_01 = ({
 
   function removeMultipleSpaces(inputString) {
     // Use regular expression to replace multiple spaces with a single space
-    const cleanedString = inputString.replace(/\s+/g, ' ').trim();
+    const cleanedString = inputString.replace(/\s+/g, " ").trim();
     return cleanedString;
-}
+  }
   const handleFetchData = () => {
     if (
       !claim?.driverDetails?.LicenseNumber ||
@@ -137,7 +137,7 @@ const Form_01 = ({
 
   return (
     <>
-      <div className="row mt-2">
+      <div className="faq_according row mt-2">
         {/* <h4 className="mb-3">Vehicle Details</h4> */}
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
@@ -160,7 +160,7 @@ const Form_01 = ({
               aria-labelledby="headingOne"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="row">
                   <div className="col-lg-9">
                     {editCase_02 ? (
@@ -239,7 +239,11 @@ const Form_01 = ({
                             className="form-control"
                             id="propertyTitle"
                             onChange={(e) => setDriverName(e.target.value)}
-                            value={DriverName && DriverName!=="null" ?removeMultipleSpaces(DriverName):""}
+                            value={
+                              DriverName && DriverName !== "null"
+                                ? removeMultipleSpaces(DriverName)
+                                : ""
+                            }
                             // placeholder="Enter Registration No."
                           />
                         </div>
@@ -275,7 +279,6 @@ const Form_01 = ({
                       </div>
                     </div>
 
-
                     <div className="col-lg-6">
                       <div className="row mt-1">
                         <div className="col-lg-5 my_profile_setting_input form-group">
@@ -297,7 +300,11 @@ const Form_01 = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={LicenseType&&LicenseType!=="null"?LicenseType:""}
+                            value={
+                              LicenseType && LicenseType !== "null"
+                                ? LicenseType
+                                : ""
+                            }
                             onChange={(e) => setLicenseType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -328,7 +335,11 @@ const Form_01 = ({
                             className="form-control"
                             id="propertyTitle"
                             onChange={(e) => setLicenseNumber(e.target.value)}
-                            value={LicenseNumber&&LicenseNumber!=="null"?LicenseNumber:""}
+                            value={
+                              LicenseNumber && LicenseNumber !== "null"
+                                ? LicenseNumber
+                                : ""
+                            }
                             // placeholder="Enter Registration No."
                           />
                         </div>
@@ -468,17 +479,18 @@ const Form_01 = ({
                           </label>
                         </div>
                         <div className="col-lg-7">
-                        <DatePicker
-                        className="form-control"
-                        id="propertyTitle"
-                        dateFormat="dd/MM/yyyy"
-                        selected={
-                          DateOfBirth !== null && !isNaN(new Date(DateOfBirth))
-                            ? new Date(DateOfBirth)
-                            : ""
-                        }
-                        onChange={(date) => setDateOfBirth(date)}
-                      />
+                          <DatePicker
+                            className="form-control"
+                            id="propertyTitle"
+                            dateFormat="dd/MM/yyyy"
+                            selected={
+                              DateOfBirth !== null &&
+                              !isNaN(new Date(DateOfBirth))
+                                ? new Date(DateOfBirth)
+                                : ""
+                            }
+                            onChange={(date) => setDateOfBirth(date)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -529,17 +541,18 @@ const Form_01 = ({
                           </label>
                         </div>
                         <div className="col-lg-7">
-                        <DatePicker
-                        className="form-control"
-                        id="propertyTitle"
-                        dateFormat="dd/MM/yyyy"
-                        selected={
-                          DateOfIssue !== null && !isNaN(new Date(DateOfIssue))
-                            ? new Date(DateOfIssue)
-                            : ""
-                        }
-                        onChange={(date) => setDateOfIssue(date)}
-                      />
+                          <DatePicker
+                            className="form-control"
+                            id="propertyTitle"
+                            dateFormat="dd/MM/yyyy"
+                            selected={
+                              DateOfIssue !== null &&
+                              !isNaN(new Date(DateOfIssue))
+                                ? new Date(DateOfIssue)
+                                : ""
+                            }
+                            onChange={(date) => setDateOfIssue(date)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -573,21 +586,21 @@ const Form_01 = ({
                           /> */}
                           {console.log("ValidUpto+++++++++", ValidUpto)}
                           <DatePicker
-                className="form-control"
-                id="propertyTitle"
-                dateFormat="dd/MM/yyyy"
-                selected={
-                  ValidUpto !== null && !isNaN(new Date(ValidUpto))
-                    ? new Date(ValidUpto)
-                    : ""
-                }
-                onChange={(date) => setValidUpto(date)}
-              />
+                            className="form-control"
+                            id="propertyTitle"
+                            dateFormat="dd/MM/yyyy"
+                            selected={
+                              ValidUpto !== null && !isNaN(new Date(ValidUpto))
+                                ? new Date(ValidUpto)
+                                : ""
+                            }
+                            onChange={(date) => setValidUpto(date)}
+                          />
                         </div>
                       </div>
                     </div>
 
-                   {/*} <div className="col-lg-6">
+                    {/*} <div className="col-lg-6">
                       <div className="row mt-1">
                         <div className="col-lg-5 my_profile_setting_input form-group">
                           <label

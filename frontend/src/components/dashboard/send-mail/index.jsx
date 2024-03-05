@@ -25,7 +25,7 @@ const index = ({ leadId, email, policyNo, Insured, vehicleNo }) => {
           id="DashboardOffcanvasMenu"
           data-bs-scroll="true"
         >
-          <SidebarMenu leadId={leadId}/>
+          <SidebarMenu leadId={leadId} />
         </div>
       </div>
       {/* End sidebar_menu */}
@@ -62,7 +62,7 @@ const index = ({ leadId, email, policyNo, Insured, vehicleNo }) => {
                 {/* End .col */}
                 <div className="row">
                   <div className="col-lg-12">
-                    <div className="my_dashboard_review">
+                    <div className="my_dashboard_review bgc-f6">
                       <div className="row">
                         <div className="col-lg-12">
                           <h4 className="mb10">Send Mails</h4>

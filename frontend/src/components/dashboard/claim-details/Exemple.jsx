@@ -377,6 +377,48 @@ import SmartTable from "./SmartTable";
         />
       ),
     },
+    {
+      _id: "6144145976c7fe",
+      serial_num: "15",
+      doc_name: "Images",
+      file: "",
+      action: (
+        <button className="btn btn-thm" >
+          <FaUpload/>
+        </button>
+      ),
+      verify: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          required
+          id="terms"
+          style={{ border: "1px solid black" }}
+        />
+      ),
+    },
+    {
+      _id: "6144145976c7fe",
+      serial_num: "15",
+      doc_name: "Videos",
+      file: "",
+      action: (
+        <button className="btn btn-thm" >
+          <FaUpload/>
+        </button>
+      ),
+      verify: (
+        <input
+          className="form-check-input"
+          type="checkbox"
+          value=""
+          required
+          id="terms"
+          style={{ border: "1px solid black" }}
+        />
+      ),
+    },
   ];
 
   export default function Exemple({ documents,leadId  }) {
@@ -545,7 +587,7 @@ useEffect(()=>{
           toast.loading("Uploading files!!", {
             className: "toast-loading-message",
           });
-          axios.post("/api/uploadDocument", payloadMain, {
+          axios.post("/api/uploadManualDocument", payloadMain, {
               headers: {
                 Authorization: `Bearer ${""}`,
                 "Content-Type": "application/json",
@@ -789,22 +831,32 @@ const getFileName = (idx)=>{
 
 
 
-  const downloadAllFiles = async () => {
+   const downloadAllFiles = async () => {
     try {
       const zip = new JSZip();
-
-
-      uploadedFiles.map((file,index)=>{
+  
+      // Iterate through uploadedFiles
+      for (const file of uploadedFiles) {
         const data = file.data;
-        const currentDocName = file.docName;
-        data.map((docFile,idx)=>{
-          const fileName=docFile.name;
+  
+        // Iterate through data array
+        if(file.data){
+        for (const docFile of data) {
+          const fileName = docFile.name;
           const path = docFile.url;
-          zip.file(currentDocName+"_"+fileName, path, { binary: true });
-        })
-      })
+  
+          // Fetch the image content
+          const response = await fetch(path);
+          const blob = await response.blob();
+  
+          // Add the image to the zip file
+          zip.file(decodeURIComponent(fileName), blob, { binary: true });
+        }
+      }
+      }
+  
       const content = await zip.generateAsync({ type: "blob" });
-
+  
       const a = document.createElement("a");
       const url = URL.createObjectURL(content);
       a.href = url;
@@ -813,16 +865,13 @@ const getFileName = (idx)=>{
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
+  
       toast.success("Successfully downloaded the zip!");
     } catch (error) {
-      console.error("Error during download:", error);
+      console.log("Error during download:", error);
       toast.error("Error during download. Please try again.");
     }
   };
-
-
-
 
 
   let tempCode = [];

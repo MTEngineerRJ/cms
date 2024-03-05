@@ -205,6 +205,10 @@ const Summary = ({
   },[]);
   
 
+  useEffect(()=>{
+    setExpectedSalvage(roundOff((totalMetalRows*MetalPercent)/100) );
+  },[MetalPercent])
+
 
 
 
@@ -594,10 +598,9 @@ const Summary = ({
                     type="text"
                     className="form-control"
                     id="propertyTitle"
-                    value={
-                      roundOff((totalMetalRows*MetalPercent)/100) 
-                      
+                    value={ExpectedSalvage
                     }
+                    onChange={(e)=>setExpectedSalvage(e.target.value)}
                     // placeholder="Enter Registration No."
                   />
                 </div>
@@ -694,7 +697,7 @@ const Summary = ({
                     value={ roundOff(Number(totalLabrorAssessed) +
                       Number(totalPartsAssessed) 
                         -Number(LessExcess)-Number(LessImposed)+Number(Other)
-                        -((totalMetalRows*MetalPercent)/100) - DepreciationValue)
+                        -ExpectedSalvage - DepreciationValue)
                       }
                     // placeholder="Enter Registration No."
                   />
@@ -745,10 +748,17 @@ const Summary = ({
             <div className="row">
               <span className="col-lg-7">Endurance :</span>
               <div className="col-lg-4">
-                <label htmlFor="" className="m-1" >
+              {!isEdit  ?
+                <label> 
+                {CashLess ? "CashLess" : "With Cash"}
+                </label>
+                :
+                <>
+                 <label htmlFor="" className="m-1" >
                   Cash Less
                 </label>
-                <input
+               
+                 <input
                   className="form-check-input mt-2"
                   type="checkbox"
                   value={CashLess}
@@ -758,6 +768,8 @@ const Summary = ({
                   // onChange={(e) => handleChange(index, row.gst + 1, "gst")}
                   id="remeberMe"
                 />
+                </>
+               }
               </div>
             </div>
             <div className="col-lg-12">

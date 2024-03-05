@@ -29,12 +29,12 @@ const Form = ({
 }) => {
   const router = useRouter();
   const [editCase_03, setEditCase_03] = useState(false);
-  const [isUpdateVehicleLoading,setisUpdateVehicleLoading]=useState(false);
-  
-  const closeFunction = ()=>{
-    setEditCase_03(false)
-    setisUpdateVehicleLoading(false)
-  }
+  const [isUpdateVehicleLoading, setisUpdateVehicleLoading] = useState(false);
+
+  const closeFunction = () => {
+    setEditCase_03(false);
+    setisUpdateVehicleLoading(false);
+  };
 
   const formatDate = (val) => {
     const date = new Date(val);
@@ -43,7 +43,7 @@ const Form = ({
   };
   return (
     <>
-      <div className="row mt-2">
+      <div className="faq_according row mt-2">
         {/* <h4 className="mb-3">Vehicle Details</h4> */}
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
@@ -67,7 +67,7 @@ const Form = ({
               aria-labelledby="headingSeven"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="row">
                   <div className="col-lg-2">
                     {editCase_03 ? (
@@ -75,29 +75,32 @@ const Form = ({
                         <button
                           className="btn-thm m-1"
                           style={{}}
-                          onClick={() =>{ 
+                          onClick={() => {
                             setisUpdateVehicleLoading(true);
-                            onSaveHandler(4,closeFunction,closeFunction)}}
+                            onSaveHandler(4, closeFunction, closeFunction);
+                          }}
                         >
                           Save
                         </button>{" "}
                         <button
-                          onClick={()=>setEditCase_03(false)}
+                          onClick={() => setEditCase_03(false)}
                           className="btn-thm flaticon-close"
                           style={{ fontSize: "14px" }}
                         ></button>
                       </>
                     ) : (
-                      claim?.claimDetails?.PolicyNumber && <button
-                        className="btn-thm"
-                        style={{}}
-                        onClick={() => setEditCase_03(true)}
-                      >
-                        <span
-                          className="flaticon-edit"
-                          style={{ fontSize: "14px" }}
-                        ></span>
-                      </button>
+                      claim?.claimDetails?.PolicyNumber && (
+                        <button
+                          className="btn-thm"
+                          style={{}}
+                          onClick={() => setEditCase_03(true)}
+                        >
+                          <span
+                            className="flaticon-edit"
+                            style={{ fontSize: "14px" }}
+                          ></span>
+                        </button>
+                      )
                     )}
                   </div>
                   <div className="col-lg-2 text-start">
@@ -106,10 +109,9 @@ const Form = ({
                     </button> */}
                   </div>
                 </div>
-                {  isUpdateVehicleLoading ?
-                  <Loader/>
-                  :
-                  editCase_03 ? (
+                {isUpdateVehicleLoading ? (
+                  <Loader />
+                ) : editCase_03 ? (
                   <div className="row">
                     <div className="col-lg-6">
                       <div className="row mt-1">
@@ -191,7 +193,7 @@ const Form = ({
                       </div>
                     </div>
 
-                   {/*} <div className="col-lg-6">
+                    {/*} <div className="col-lg-6">
                       <div className="row mt-1">
                         <div className="col-lg-5 my_profile_setting_input form-group">
                           <label
@@ -244,7 +246,7 @@ const Form = ({
                       </div>
                         </div>*/}
 
-                   {/* <div className="col-lg-6">
+                    {/* <div className="col-lg-6">
                       <div className="row mt-1">
                         <div className="col-lg-5 my_profile_setting_input form-group">
                           <label
@@ -274,7 +276,7 @@ const Form = ({
                       </div>
                           </div>*/}
 
-                   {/* <div className="col-lg-6">
+                    {/* <div className="col-lg-6">
                       <div className="row mt-1">
                         <div className="col-lg-5 my_profile_setting_input form-group">
                           <label
@@ -308,10 +310,11 @@ const Form = ({
                   </div>
                 ) : (
                   <div className="row">
-                    <Form_garage claim={claim}
-                    GarageNameAndAddress={GarageNameAndAddress}
-                    GarageContactNo1={GarageContactNo1}
-                    GarageAddedBy={GarageAddedBy}
+                    <Form_garage
+                      claim={claim}
+                      GarageNameAndAddress={GarageNameAndAddress}
+                      GarageContactNo1={GarageContactNo1}
+                      GarageAddedBy={GarageAddedBy}
                     />
                   </div>
                 )}

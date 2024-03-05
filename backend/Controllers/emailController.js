@@ -36,21 +36,20 @@ const createToken = require("../Config/generateJWTToken");
       const content = emailHandler(result[0]?.Status);
   
       const value = type;
-      const InsuredToken = type === 4 || type === 1 ? generateUniqueToken() : "";
-      const BrokerToken =  type === 4 || type === 3 ? generateUniqueToken() : "";
-      const GarageToken =  type === 4 || type === 2 ? generateUniqueToken() : "";
+      const InsuredToken = generateUniqueToken();
+      const ImageToken =  generateUniqueToken();
+      const VideoToken  =  generateUniqueToken();
       
       const insertClaimDetails = `
           UPDATE ClaimDetails
           SET
           InsuredToken = '${InsuredToken}',
-          BrokerToken='${BrokerToken}',
-          GarageToken='${GarageToken}'
+          ImageToken ='${ImageToken}',
+          VideoToken ='${VideoToken}'
           WHERE LeadId = ${leadId};
         `;
        
-        const sendingToken = type === 1 ? InsuredToken : type == 2  ? GarageToken : BrokerToken;
-      db.query(insertClaimDetails, (err, result2) => {
+          db.query(insertClaimDetails, (err, result2) => {
         if (err) {
           console.error(err);
           res.status(500).send("Internal Server Error");
@@ -67,22 +66,22 @@ const createToken = require("../Config/generateJWTToken");
       Insurance co. Ltd., So we request you please provide the complete contact deatils & mails of Repairer/insured. So that we 
       can procedd further in your case and we also request 
       you to provide the following details as follows:-
-  
+
       ${content}
-  
-          Please provide the clear copy of all the documents so that the claim processing can be fast or
-        <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${sendingToken}&type=${type}&content=${""} target="_blank">Click me</a> to fill the documents information .</p>
-  
-        Please provide the clear Vahicle Videos so that the claim processing can be fast or
-        <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${sendingToken}&type=${type}&content=${"Videos"} target="_blank">Click me</a> to fill the documents information .</p>
-  
-        Please provide the  all the clear Images of the Vehicle so that the claim processing can be fast or
-        <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${sendingToken}&type=${type}&content=${"Images"} target="_blank">Click me</a> to fill the documents information .</p>
-  
-      Note:-  If We Cannot get the response with in 02 days we will inform the insurer that the insured is not interseted in the
-            claim. So close the file as"No Claim" in non copperation & non submission of the documents. 
-  
-    `;
+
+      Please provide the clear copy of all the documents so that the claim processing can be fast or
+      <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${InsuredToken}&type=${1}&content=${""} target="_blank">Click me</a> to fill the documents information .</p>
+
+      Please provide the clear Vahicle Videos so that the claim processing can be fast or
+      <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${ImageToken}&type=${2}&content=${"Images"} target="_blank">Click me</a> to fill the documents information .</p>
+
+      Please provide the  all the clear Images of the Vehicle so that the claim processing can be fast or
+      <p><a href=https://claims-app-phi.vercel.app/documents/${leadId}?token=${VideoToken}&type=${3}&content=${"Videos"} target="_blank">Click me</a> to fill the documents information .</p>
+
+    Note:-  If We Cannot get the response with in 02 days we will inform the insurer that the insured is not interseted in the
+          claim. So close the file as"No Claim" in non copperation & non submission of the documents. 
+
+  `;
   
         const mailOptions = {
           from: "infosticstech@gmail.com",
@@ -120,7 +119,6 @@ const createToken = require("../Config/generateJWTToken");
       });
   };
   
-
   const acknowledgmentMail = (req, res) => {
     const { vehicleNo, PolicyNo, Insured, Date, leadId, toMail  } = req.body;
 

@@ -267,13 +267,13 @@ const Form = ({
   //permanenet Address
   return (
     <>
-      <div className=" faq_according row">
+      <div className="faq_according row">
         {/* <h4 className="mb-3">Vehicle Details</h4> */}
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingThree">
               <button
-                class="btn accordion-button collapsed"
+                class="btn accordion-button collapsed btn-clicked"
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseThree"
@@ -300,7 +300,7 @@ const Form = ({
               aria-labelledby="headingThree"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="row">
                   <div className="">
                     {editCase_01 ? (
@@ -368,7 +368,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Vehicle Model 
+                            Vehicle Model
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -428,7 +428,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Registered Owner 
+                            Registered Owner
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -436,8 +436,12 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleRegisteredOwner&&VehicleRegisteredOwner!=="null"?
-                            VehicleRegisteredOwner:""}
+                            value={
+                              VehicleRegisteredOwner &&
+                              VehicleRegisteredOwner !== "null"
+                                ? VehicleRegisteredOwner
+                                : ""
+                            }
                             onChange={(e) =>
                               setVehicleRegisteredOwner(e.target.value)
                             }
@@ -461,7 +465,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Date of Registration 
+                            Date of Registration
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -507,7 +511,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            PUC Number 
+                            PUC Number
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -567,7 +571,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Engine Number 
+                            Engine Number
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -575,7 +579,11 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={EngineNumber&&EngineNumber!=="null"?EngineNumber:""}
+                            value={
+                              EngineNumber && EngineNumber !== "null"
+                                ? EngineNumber
+                                : ""
+                            }
                             onChange={(e) => setEngineNumber(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -635,8 +643,12 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleChassisNumber&&VehicleChassisNumber!=="null"?
-                            VehicleChassisNumber:""}
+                            value={
+                              VehicleChassisNumber &&
+                              VehicleChassisNumber !== "null"
+                                ? VehicleChassisNumber
+                                : ""
+                            }
                             onChange={(e) =>
                               setVehicleChassisNumber(e.target.value)
                             }
@@ -660,7 +672,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Fuel Type 
+                            Fuel Type
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -668,7 +680,11 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleFuelType&&VehicleFuelType!=="null"?VehicleFuelType:""}
+                            value={
+                              VehicleFuelType && VehicleFuelType !== "null"
+                                ? VehicleFuelType
+                                : ""
+                            }
                             onChange={(e) => setVehicleFuelType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -690,7 +706,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Registerd Number 
+                            Registerd Number
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -752,7 +768,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Vehicle Segment 
+                            Bancs Vehicle Segment
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -784,7 +800,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Vehicle Class 
+                            Bancs Vehicle Class
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -816,7 +832,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Body Type 
+                            Bancs Body Type
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -846,7 +862,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Fuel Type 
+                            Bancs Fuel Type
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -854,7 +870,11 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={VehicleFuelType&&VehicleFuelType!=="null"?VehicleFuelType:""}
+                            value={
+                              VehicleFuelType && VehicleFuelType !== "null"
+                                ? VehicleFuelType
+                                : ""
+                            }
                             onChange={(e) => setVehicleFuelType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -876,7 +896,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Subtype Code 
+                            Bancs Subtype Code
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -908,7 +928,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Make Code 
+                            Bancs Make Code
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -938,7 +958,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Bancs Model Code 
+                            Bancs Model Code
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -968,7 +988,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Vehicle Type 
+                            Vehicle Type
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -976,7 +996,11 @@ const Form = ({
                             type="text"
                             className="form-control"
                             id="propertyTitle"
-                            value={RcVehicleType&&RcVehicleType!=="null"?RcVehicleType:""}
+                            value={
+                              RcVehicleType && RcVehicleType !== "null"
+                                ? RcVehicleType
+                                : ""
+                            }
                             onChange={(e) => setRcVehicleType(e.target.value)}
 
                             // placeholder="Enter Registration No."
@@ -998,7 +1022,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Vehicle Rc Status 
+                            Vehicle Rc Status
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -1029,7 +1053,6 @@ const Form = ({
                             }}
                           >
                             Vehicle Black ListStatus{" "}
-                            
                           </label>
                         </div>
 
@@ -1062,7 +1085,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Vehicle Registed At 
+                            Vehicle Registed At
                           </label>
                         </div>
 
@@ -1092,7 +1115,6 @@ const Form = ({
                             }}
                           >
                             Vehicle Insurance Upto{" "}
-                            
                           </label>
                         </div>
 
@@ -1125,7 +1147,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Seating Capacity 
+                            Seating Capacity
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -1158,7 +1180,7 @@ const Form = ({
                               // marginTop: "-13px",
                             }}
                           >
-                            Cubic Capacity 
+                            Cubic Capacity
                           </label>
                         </div>
                         <div className="col-lg-7">
@@ -1190,7 +1212,6 @@ const Form = ({
                             }}
                           >
                             Vehicle Insurance Company{" "}
-                            
                           </label>
                         </div>
 

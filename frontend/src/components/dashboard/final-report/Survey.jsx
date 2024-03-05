@@ -150,13 +150,47 @@ const Servey = ({
       day: "2-digit",
       year: "numeric",
     };
-
+  
     const formattedDate = new Date(dateString).toLocaleDateString(
       "en-US",
       options
     );
     return formattedDate;
   };
+  function isvaliddate(date) {
+    return (
+      date !== null &&
+      date !== undefined &&
+      date !== "null" &&
+      date !== "undefined"
+    );
+  }
+  const formatDateUpdated = (dateString) => {
+    if (!isvaliddate(dateString)) {
+      console.error("Invalid date:", dateString);
+      return null;
+    }
+    const date = new Date(dateString);
+
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+    const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
+
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+  };
+  function localDate(dateString) {
+    if (dateString && dateString !== "null") {
+      return new Date(dateString).toLocaleDateString("fr-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        timeZone: "Asia/Kolkata",
+      });
+    } else {
+      return "";
+    }
+  }
 
   const formatTime = (dateString) => {
     const options = {
@@ -169,21 +203,24 @@ const Servey = ({
     return formattedDate;
   };
 
-  
-  useEffect(()=>{
+  useEffect(() => {
     const accident = AccidentContent(claim?.insuredDetails?.InsuredName);
-    const assessment = AssessmentContent(claim?.claimDetails?.claimServicingOffice,
-                                        SurveyAllotmentDate,AccidentAddedDateTime,PlaceOfSurvey);
+    const assessment = AssessmentContent(
+      claim?.claimDetails?.claimServicingOffice,
+      SurveyAllotmentDate,
+      AccidentAddedDateTime,
+      PlaceOfSurvey
+    );
     const other = otherContent();
-    
-    console.log("accident",accident);
-    console.log("CauseOfAccident",CauseOfAccident)
-    setCauseOfAccident(CauseOfAccident ? CauseOfAccident : accident)
-    setAssessment(Assessment ? Assessment : assessment)
-    setThirdPartyLoss(ThirdPartyLoss ? ThirdPartyLoss : other)
-    setPoliceAction(PoliceAction ? PoliceAction : other)
-    setDetailsOfLoads(DetailsOfLoads ? DetailsOfLoads : other)
-  },[CauseOfAccident]);
+
+    console.log("accident", accident);
+    console.log("CauseOfAccident", CauseOfAccident);
+    setCauseOfAccident(CauseOfAccident ? CauseOfAccident : accident);
+    setAssessment(Assessment ? Assessment : assessment);
+    setThirdPartyLoss(ThirdPartyLoss ? ThirdPartyLoss : other);
+    setPoliceAction(PoliceAction ? PoliceAction : other);
+    setDetailsOfLoads(DetailsOfLoads ? DetailsOfLoads : other);
+  }, [CauseOfAccident]);
 
   const calculateVehicleAge = () => {
     if (
@@ -331,11 +368,7 @@ const Servey = ({
                     <input
                       readOnly={!isEditMode}
                       type={"text"}
-                      value={
-                        AccidentAddedDateTime
-                          ? formatDate(AccidentAddedDateTime)
-                          : ""
-                      }
+                      value={formatDateUpdated(AccidentAddedDateTime)}
                       className="form-control"
                       id="propertyTitle"
                     />
@@ -344,10 +377,7 @@ const Servey = ({
                       type="date"
                       disabled={!isEditMode}
                       value={
-                        AccidentAddedDateTime &&
-                        AccidentAddedDateTime !== "null"
-                          ? AccidentAddedDateTime
-                          : ""
+                        localDate(AccidentAddedDateTime) 
                       }
                       onChange={(e) => setAccidentAddedDateTime(e.target.value)}
                     />
@@ -604,6 +634,7 @@ const Servey = ({
                 <input
                   readOnly={!isEditMode}
                   type="text"
+                  placeholder="Not conducted, As stated by insured"
                   value={
                     SurveyConductedDate && SurveyConductedDate !== "null"
                       ? SurveyConductedDate
@@ -666,13 +697,12 @@ const Servey = ({
           </div>
           <div className="col-lg-12 mb-2">
             <div className="">
-                <ReactEditor
+              <ReactEditor
                 index={3}
                 readOnly={!isEditMode}
                 editorContent={PoliceAction}
                 setEditorContent={setPoliceAction}
               />
-            
             </div>
           </div>
         </div>
@@ -708,13 +738,12 @@ const Servey = ({
           </div>
           <div className="row">
             <div className="">
-            <ReactEditor
-            index={9}
-              readOnly={!isEditMode}
-              editorContent={DetailsOfLoads}
-              setEditorContent={setDetailsOfLoads}
-            />
-             
+              <ReactEditor
+                index={9}
+                readOnly={!isEditMode}
+                editorContent={DetailsOfLoads}
+                setEditorContent={setDetailsOfLoads}
+              />
             </div>
           </div>
           <div className="col-lg-12">{/** <Editor /> */}</div>
@@ -722,13 +751,12 @@ const Servey = ({
             <h4>Third Party Loss / Injuries :</h4>
             <hr />
             <div className="">
-            <ReactEditor
-            index={4}
-              readOnly={!isEditMode}
-              editorContent={ThirdPartyLoss}
-              setEditorContent={setThirdPartyLoss}
-            />
-            
+              <ReactEditor
+                index={4}
+                readOnly={!isEditMode}
+                editorContent={ThirdPartyLoss}
+                setEditorContent={setThirdPartyLoss}
+              />
             </div>
           </div>
           <div className="col-lg-12">{/** <Editor /> */}</div>
@@ -777,13 +805,12 @@ const Servey = ({
               />
             </div> */}
             <div className="">
-            <ReactEditor
-            index={5}
-              readOnly={!isEditMode}
-              editorContent={Assessment}
-              setEditorContent={setAssessment}
-            />
-            
+              <ReactEditor
+                index={5}
+                readOnly={!isEditMode}
+                editorContent={Assessment}
+                setEditorContent={setAssessment}
+              />
             </div>
           </div>
           <div className="col-lg-12 mb-2">{/** <Editor /> */}</div>

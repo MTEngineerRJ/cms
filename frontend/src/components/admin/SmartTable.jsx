@@ -6,6 +6,7 @@ import SVGChevronLeft from "./icons/SVGChevronLeft";
 import SVGChevronRight from "./icons/SVGChevronRight";
 
 function SmartTable(props) {
+  console.log(props.setMajorSearch);
   const [loading, setLoading] = useState(false);
   const [sortDesc, setSortDesc] = useState({});
   const [tableWidth, setTableWidth] = useState(1000);
@@ -104,21 +105,28 @@ function SmartTable(props) {
   }, props.searchDebounceTime ?? 800);
 
   const sortData = (cell) => {
-    let tempData = [...data];
+    let tempData = data.length > 0 ? [...data] : [...props.data];
 
     tempData.sort((a, b) => {
+      const valueA =
+        typeof a[cell] === "string" ? a[cell].toLowerCase() : a[cell];
+      const valueB =
+        typeof b[cell] === "string" ? b[cell].toLowerCase() : b[cell];
+
       if (sortDesc[cell]) {
-        return a[cell].toLowerCase() < b[cell].toLowerCase() ? 1 : -1;
+        return valueA < valueB ? 1 : -1;
       } else {
-        return a[cell].toLowerCase() > b[cell].toLowerCase() ? 1 : -1;
+        return valueA > valueB ? 1 : -1;
       }
     });
     setSortDesc({ [cell]: !sortDesc[cell] });
+
     setData(tempData);
   };
 
+
   return (
-    <div className="col-12 p-3">
+    <div className="col-12 p-2">
       <div className="smartTable-container row">
         <div className="col-12">
           {loading && (
@@ -127,19 +135,16 @@ function SmartTable(props) {
             </div>
           )}
           <div className="row">
-            <div
-              className="col-8 h4 text-start mt-2"
-              style={{ marginLeft: "20px" }}
-            >
-              {props.title}
+            <div className="col-9 h3">{props.title}</div>
+            <div className="col-lg-3">
+              <input
+                style={{ height: "40px" }}
+                type="text"
+                className="form-control"
+                placeholder="Search..."
+                onChange={(e) => props.setMajorSearch(e.target.value)}
+              />
             </div>
-            {/* <div className="col-lg-3">
-              <div
-                className="btn btn-log btn-thm flaticon-pdf"
-                title="pdf zip download"
-                style={{ marginLeft: "250px" }}
-              ></div>
-            </div> */}
           </div>
           {props.data.length > 0 ? (
             <div className="row mt-3">
@@ -158,6 +163,8 @@ function SmartTable(props) {
                             scope="col"
                             style={{
                               width: headCell.width ?? "auto",
+                              backgroundColor: "#2e008b",
+                              color: "white",
                             }}
                             className={
                               headCell.sortable !== false
@@ -184,8 +191,9 @@ function SmartTable(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {props.data.length < 0
-                      ? data.map((row, idx) => {
+                  {data.length > 0
+                    ? data.map((row, idx) => {
+                        if (idx >= props.start && idx <= props.end) {
                           return (
                             <tr key={"tr_" + idx}>
                               {props.headCells.map((headCell, idxx) => {
@@ -199,8 +207,12 @@ function SmartTable(props) {
                               })}
                             </tr>
                           );
-                        })
-                      : props.data.map((row, idx) => {
+                        } else {
+                          return null; // Skip rendering rows that don't meet the condition
+                        }
+                      })
+                    : props.data.map((row, idx) => {
+                        if (idx >= props.start && idx <= props.end) {
                           return (
                             <tr key={"tr_" + idx}>
                               {props.headCells.map((headCell, idxx) => {
@@ -214,23 +226,83 @@ function SmartTable(props) {
                               })}
                             </tr>
                           );
-                        })}
-                  </tbody>
+                        } else {
+                          return null; // Skip rendering rows that don't meet the condition
+                        }
+                      })}
+                </tbody>
                 </table>
               </div>
             </div>
           ) : (
-            <div className="row p-4">
-              <div className="smartTable-noDataFound col-12">
+            // <div className="row">
+            //   <div
+            //     className="smartTable-noDataFound col-12"
+            //     style={{ marginTop: "110px", marginBottom: "40px" }}
+            //   >
+            //     <div className="ring">
+            //       Loading
+            //       <span className="load"></span>
+            //     </div>
+            //   </div>
+            // </div>
+            <div className="row">
+              <div className="row mt-3">
+                <div className="smartTable-tableContainer">
+                  <table
+                    className={"smartTable-table table table-striped border"}
+                    style={{ minWidth: tableWidth }}
+                  >
+                    <thead className="smartTable-thead">
+                      <tr>
+                        {props.headCells.map((headCell) => {
+                          return (
+                            <th
+                              id={headCell.id}
+                              key={headCell.id}
+                              scope="col"
+                              style={{
+                                width: headCell.width ?? "auto",
+                                backgroundColor: "#2e008b",
+                                color: "white",
+                              }}
+                              className={
+                                headCell.sortable !== false
+                                  ? "smartTable-pointer"
+                                  : ""
+                              }
+                              onClick={() =>
+                                headCell.sortable !== false
+                                  ? sortData(headCell.id)
+                                  : {}
+                              }
+                            >
+                              {headCell.label}
+                              {sortDesc[headCell.id] ? (
+                                <SVGArrowDown />
+                              ) : sortDesc[headCell.id] === undefined ? (
+                                ""
+                              ) : (
+                                <SVGArrowUp />
+                              )}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+              <div className="col-lg-12 text-center mt-5">
                 <h4>NO DATA FOUND</h4>
               </div>
             </div>
           )}
           {props.noPagination || data.length === 0 || !props.url ? (
             <div className="row">
-              <div className="col-12 text-end p-3">
+              {/* <div className="col-12 text-end p-3">
                 {props.data.length > 0 ? props.data.length : 0} Rows
-              </div>
+              </div> */}
             </div>
           ) : (
             <div className="row">

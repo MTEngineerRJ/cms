@@ -519,7 +519,19 @@ const [AccidentTime,setAccidentTime]=useState("");
     //summary states
 
     setAccidentTime(claim?.accidentDetails?.TimeOfAccident ? claim?.accidentDetails?.TimeOfAccident : "");
-    setFinalReportNotes(claim?.summaryDetails?.SummaryNotes ? claim?.summaryDetails?.SummaryNotes : "");
+    setFinalReportNotes(claim?.summaryDetails?.SummaryNotes ? claim?.summaryDetails?.SummaryNotes : `
+    1. Reference No is coming at the place of claim No<br>
+    2. Date of Registration at the time of viewing the format is coming wrong.<br>
+    3. Driver and License Detail section<br>
+    4. Date of Birth and valid up to is coming invalid.<br>
+    5. map rc_fit_upto in tax particular.<br>
+    6. Commercial vehicle details should come on print if it is checked.<br>
+    7. Date of Accident is not coming in the right way.<br>
+    8. Sport Survey Received default Not conducted, As stated by insured<br>
+    9. All the variable we are fetching from Background needs to<br>
+    `);
+
+    
     setTotalLabor(claim?.summaryDetails?.TotalLabor ? claim?.summaryDetails?.TotalLabor : 0 );
     setTotalEstimateSum( claim?.summaryDetails?.TotalEstimate ? claim?.summaryDetails?.TotalEstimate : 0);
     setLessExcess(claim?.summaryDetails?.LessExcess ? claim?.summaryDetails?.LessExcess : 0);
@@ -646,7 +658,7 @@ const [AccidentTime,setAccidentTime]=useState("");
     setDateOfIssue(claim?.driverDetails?.DateOfIssue);
     setVehiclePreAccidentCondition(claim?.vehicleDetails?.PreAccidentCondition);
     setSurveyConductedDate(claim?.accidentDetails?.SurveyConductedDate);
-    setVehicleTaxParticulars(claim?.vehicleDetails?.TaxParticulars);
+    setVehicleTaxParticulars(claim?.vehicleDetails?.FitUpto);
     setPUCNumber(claim?.vehicleDetails?.PucNumber);
     setVehicleSeatingCapacity(claim?.vehicleDetails?.SeatingCapacity || 0);
     setClaimServicingOffice(claim?.claimDetails?.ClaimServicingOffice);

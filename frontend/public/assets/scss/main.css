@@ -122,6 +122,7 @@ html {
 body {
   background-attachment: fixed;
   background-color: #ffffff;
+  /* background-color: #4f97df; */
   color: #777777;
   font-family: "Nunito", sans-serif;
   font-size: 16px;
@@ -17118,6 +17119,10 @@ legend span {
   background-color: #28b928;
 }
 
+.bg-logo{
+  background-color: #36BBFF;
+}
+
 .bdrrn {
   border: none;
 }
@@ -21789,4 +21794,7 @@ input:invalid {
   font-size: 20px;
   /* width: 34vw; */
   padding: 30px 20px;
+}
+.btn-clicked {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
 }

@@ -12,8 +12,8 @@ const CreateList = ({ allInfo, leadID }) => {
 
   const [Bill, setBill] = useState("");
   const currentDate = new Date();
-const formattedDate = currentDate.toLocaleDateString('en-GB');
-console.log(formattedDate)
+  const formattedDate = currentDate.toLocaleDateString("en-GB");
+  console.log(formattedDate);
   const [date, setDate] = useState(new Date());
   const [Insurer, setInsurer] = useState("");
   const [Branch, setBranch] = useState("");
@@ -283,7 +283,7 @@ console.log(formattedDate)
       PhotsRate: DetailsPhotoRate,
       EstimateAmt: Estimate,
       AssessedAmt: Assessed,
-      InsuranceCompanyName: allInfo?.otherInfo[0]?.InsuranceCompanyNameAddress  ,
+      InsuranceCompanyName: allInfo?.otherInfo[0]?.InsuranceCompanyNameAddress,
       Branch: Branch,
       BillTo: BillTo,
       Others: Others,
@@ -392,7 +392,7 @@ console.log(formattedDate)
     const options = {
       year: "numeric",
       month: "2-digit",
-      day: "2-digit"
+      day: "2-digit",
     };
 
     const formattedDate = new Date(dateString).toLocaleString("en-US", options);
@@ -422,7 +422,7 @@ console.log(formattedDate)
                   type="text"
                   className="form-control"
                   id="broker_mail_id"
-                  value={(allInfo?.feesDetails?.BillID)}
+                  value={allInfo?.feesDetails?.BillID}
                 />
               </div>
               <div className="col-lg-1 my_profile_setting_input form-group">
@@ -438,14 +438,13 @@ console.log(formattedDate)
                 </label>
               </div>
               <div className="col-lg-4">
-                <
-                  input
+                <input
                   type="date"
                   disable={false}
                   className="form-control"
                   id="broker_mail_id"
                   value={new Date(date)}
-                  onChange={(e)=>setDate(e.target.value)}
+                  onChange={(e) => setDate(e.target.value)}
                 />
               </div>
             </div>
@@ -472,7 +471,6 @@ console.log(formattedDate)
                   className="form-control"
                   id="broker_mail_id"
                   value={Insurer}
-                  
                 />
               </div>
             </div>
@@ -505,9 +503,7 @@ console.log(formattedDate)
             </div>
           </div>
 
-         
-
-           <div className="col-lg-12">
+          <div className="col-lg-12">
             <div className="row mt-1">
               <div className="col-lg-2 my_profile_setting_input form-group">
                 <label
@@ -535,18 +531,18 @@ console.log(formattedDate)
                     Select Type
                   </option>
                   <option data-tokens="Status1" value={"spot"}>
-                    Spot
+                    Insured
                   </option>
                   <option data-tokens="Status2" value={"final"}>
-                    Final
+                    Appointing office
                   </option>
                   <option data-tokens="Status3" value={"re-inspection"}>
-                    Pre-inspection
+                    Insurer
                   </option>
                 </select>
               </div>
             </div>
-          </div> 
+          </div>
           <div className="col-lg-12">
             <div className="row mt-1">
               <div className="col-lg-2 my_profile_setting_input form-group">

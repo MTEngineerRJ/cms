@@ -28,7 +28,7 @@ const PaymentDetails = ({ edit, onSaveHandler }) => {
 
   return (
     <>
-      <div className=" faq_according row">
+      <div className="faq_according row">
         {/* <h4 className="mb-3">Vehicle Details</h4> */}
         <div class="accordion" id="accordionExample">
           <div class="accordion-item">
@@ -52,7 +52,7 @@ const PaymentDetails = ({ edit, onSaveHandler }) => {
               aria-labelledby="headingFive"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="row">
                   <div className="col-lg-1">
                     {editCase_11 ? (

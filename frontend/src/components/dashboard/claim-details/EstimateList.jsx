@@ -53,7 +53,7 @@ const EstimateList = ({ edit, onSaveHandler }) => {
               aria-labelledby="headingEight"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="row">
                   <div className="col-lg-2  ">
                     {editCase_10 ? (

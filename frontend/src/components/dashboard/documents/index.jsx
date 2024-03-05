@@ -106,13 +106,16 @@ const Index = ({ leadId, token, content ,type}) => {
   useEffect(() => {
     const unserInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-
+    const current_url = window.location.href
+    const current_type = current_url?.split("&type=")[1]
+    const type_ = current_type?.split("&content")[0]
+    console.log(type_, current_type,current_url )
     const payload = {
       token: token,
       leadId: Number(leadId),
-      type:Number(type)
+      type:Number(type_)
     };
-
+    // console.log('22222222222222',payload)
     axios
       .post("/api/getClaimDetails", payload, {
         headers: {
@@ -140,8 +143,9 @@ const Index = ({ leadId, token, content ,type}) => {
     return numberOfCommas;
   }
 
-  const onSubmitHandler = () => {
+   const onSubmitHandler = () => {
 
+    console.log("uploaded",uploadedData);
 
     let data = [];
     for (let i = 0; i < 17; i = i + 1) {
@@ -172,7 +176,7 @@ const Index = ({ leadId, token, content ,type}) => {
       const unserInfo = JSON.parse(localStorage.getItem("userInfo"));
       
       
-      const payload = JSON.stringify({ data: data });
+      const payload = JSON.stringify({type:type, data: data });
 
       toast.loading("Uploading!");
       axios.post("/api/uploadDocument", payload, {
@@ -190,7 +194,6 @@ const Index = ({ leadId, token, content ,type}) => {
         });
     }
   };
-
   return (
     <>
       {/* <!-- Main Header Nav --> */}

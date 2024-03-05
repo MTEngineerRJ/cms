@@ -268,9 +268,7 @@ const Index = ({}) => {
         : claimServicingOffice
     );
 
-
-    setMobile(claim?.driverDetails?.Mobile ? claim?.driverDetails?.Mobile :
-      "");
+    setMobile(claim?.driverDetails?.Mobile ? claim?.driverDetails?.Mobile : "");
     setPolicyStartDate(
       claim?.claimDetails?.PolicyPeriodStart
         ? claim?.claimDetails?.PolicyPeriodStart
@@ -652,14 +650,14 @@ const Index = ({}) => {
 
   function convertAndFormatDate(inputDate) {
     // Remove leading whitespaces, if any
-    const trimmedDate = inputDate
-  
+    const trimmedDate = inputDate;
+
     // Convert the date string to a Date object
     const dateObject = new Date(trimmedDate);
-  
+
     // Format the date to "dd/mm/yyyy"
-    const formattedDate = dateObject.toLocaleDateString('en-GB');
-  
+    const formattedDate = dateObject.toLocaleDateString("en-GB");
+
     return formattedDate;
   }
 
@@ -783,13 +781,13 @@ const Index = ({}) => {
       Mobile,
       Address,
       RtoName,
-      ValidUpto:ValidUpto?convertAndFormatDate(ValidUpto):"",
+      ValidUpto: ValidUpto ? convertAndFormatDate(ValidUpto) : "",
       Vov,
       Photo,
       Pht,
-      DateOfBirth:DateOfBirth?convertAndFormatDate(DateOfBirth):"",
+      DateOfBirth: DateOfBirth ? convertAndFormatDate(DateOfBirth) : "",
       ClassOfVehicle,
-      DateOfIssue:DateOfIssue?convertAndFormatDate(DateOfIssue):"",
+      DateOfIssue: DateOfIssue ? convertAndFormatDate(DateOfIssue) : "",
       SeatingCapacity: VehicleSeatingCapacity,
       IsDriverDetailsFetched,
       IsRcDetailsFetched,
@@ -914,6 +912,32 @@ const Index = ({}) => {
     setIsStatusModal(false);
   };
 
+  const separateLinks = (linksString) => {
+    // Split the input string into an array of links
+    const linksArray = linksString.split(",");
+
+    // Trim whitespaces from each link
+    const trimmedLinks = linksArray.map((link) => link.trim());
+
+    // Define the common prefix
+    const prefix = "https://";
+
+    // Filter and form the final array with the common prefix
+    const finalArray = trimmedLinks.filter((link) => link.startsWith(prefix));
+
+    return finalArray;
+  };
+
+  const separateStringToArray = (inputString) => {
+    // Split the input string into an array using ','
+    const resultArray = inputString.split(",");
+
+    // Trim whitespaces from each element in the array
+    const trimmedArray = resultArray.map((item) => item.trim());
+
+    return trimmedArray;
+  };
+
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
@@ -949,77 +973,85 @@ const Index = ({}) => {
           },
         })
         .then((res) => {
-          console.log( "Documents--------------->",res.data.data);
+          console.log("Documents--------------->", res.data.data);
           const tempList = res.data.data;
           let requiredVideos = [];
-          console.log("requiredDocumenstList",tempList);
+          console.log("requiredDocumenstList", tempList);
           tempList.map((list, index) => {
             if (
               list.file_name.toLowerCase().includes(".mp4") ||
               list.file_name.toLowerCase().includes(".mp3")
             ) {
-              requiredVideos.push({
-                name: list.file_name,
-                url: list.doc_url,
+              const allList = separateLinks(list.doc_url);
+              const allName = separateStringToArray(list.file_name);
+              const allLatitude = separateStringToArray(list?.latitude);
+              const allLongitude = separateStringToArray(list?.longitude);
+              const allTimestamp = separateStringToArray(list?.timestamp);
+
+              allList?.map((link, idx) => {
+                requiredVideos.push({
+                  name: allName[idx],
+                  url: allList[idx],
+                  longitude: allLongitude[idx],
+                  latitude: allLatitude[idx],
+                  timestamp: allTimestamp[idx],
+                });
               });
             }
-           
           });
 
-
           let requiredDocumenstList = [];
-          tempList.map((temp,index)=>{
+          tempList.map((temp, index) => {
             let indexTobeFinded = -1;
-            requiredDocumenstList?.map((doc,idx)=>{
-              if(String(temp.DocumentName)===String(doc.docName)){
-                indexTobeFinded=idx;
+            requiredDocumenstList?.map((doc, idx) => {
+              if (String(temp.DocumentName) === String(doc.docName)) {
+                indexTobeFinded = idx;
               }
-            })
+            });
 
-            if(indexTobeFinded!==-1){
-              const newDocListWithinWhole = requiredDocumenstList[indexTobeFinded];
+            if (indexTobeFinded !== -1) {
+              const newDocListWithinWhole =
+                requiredDocumenstList[indexTobeFinded];
               const newDocListWithin = newDocListWithinWhole.data;
 
               newDocListWithin.push({
-                name:temp.file_name,
-                url:temp.doc_url,
-                location:temp.latitude+","+temp.longitude,
-                Timestamp:temp.timestamp
+                name: temp.file_name,
+                url: temp.doc_url,
+                location: temp.latitude + "," + temp.longitude,
+                Timestamp: temp.timestamp,
               });
 
               const oldData = requiredDocumenstList;
-              oldData[indexTobeFinded]=newDocListWithin;
-              requiredDocumenstList=oldData;
-            }
-            else{
+              oldData[indexTobeFinded] = newDocListWithin;
+              requiredDocumenstList = oldData;
+            } else {
               let newDocListWithin = [];
-            
+
               // Split the doc_url string into an array of URLs
-              let urlArray = temp.doc_url.split(',');
-            
+              let urlArray = temp.doc_url.split(",");
+
               // Split the file_name string into an array of file names
-              let fileNameArray = temp.file_name.split(',');
-            
+              let fileNameArray = temp.file_name.split(",");
+
               // Iterate over the arrays and push the corresponding values to newDocListWithin
               for (let i = 0; i < urlArray.length; i++) {
                 newDocListWithin.push({
                   name: fileNameArray[i],
                   url: urlArray[i],
                   location: temp.latitude + "," + temp.longitude,
-                  Timestamp: temp.timestamp
+                  Timestamp: temp.timestamp,
                 });
               }
-            
+
               const oldData = requiredDocumenstList;
               oldData.push({
-                leadId:temp.LeadId,
-                docName:temp.DocumentName,
-                data:newDocListWithin
-              })
-              requiredDocumenstList=oldData;
+                leadId: temp.LeadId,
+                docName: temp.DocumentName,
+                data: newDocListWithin,
+              });
+              requiredDocumenstList = oldData;
             }
-
-          })
+          });
           setVideosList(requiredVideos);
           setDocuments(requiredDocumenstList);
         })
@@ -1137,7 +1169,7 @@ const Index = ({}) => {
                   <div className="row">
                     <div className="col-lg-9">
                       <div className="">
-                        <div className="my_dashboard_review mb-2">
+                        <div className="my_dashboard_review mb-2 bgc-f6">
                           <div className="col-lg-12">
                             <div className="row">
                               <div className="col-lg-2">
@@ -1663,7 +1695,7 @@ const Index = ({}) => {
                     <div className="col-lg-3">
                       <div className="">
                         <div className="row" style={{ marginLeft: "0px" }}>
-                          <div className="row mb-2 my_dashboard_review">
+                          <div className="row mb-2 my_dashboard_review bgc-f6">
                             <div className="col-lg-12">
                               <h4 className="mb10">Status Log</h4>
                             </div>
@@ -1687,7 +1719,7 @@ const Index = ({}) => {
                             {/* <CreateList /> */}
                           </div>
                           {/* <hr /> */}
-                          <div className="row mt-2 mb-2 my_dashboard_review">
+                          <div className="row mt-2 mb-2 my_dashboard_review bgc-f6">
                             <div className="col-lg-12">
                               <h4 className="mb10">Comment Log</h4>
                             </div>
@@ -1704,7 +1736,7 @@ const Index = ({}) => {
                             <ChatboxContent />
                           </div>
                           {/* <hr /> */}
-                          <div className="row mt-2 my_dashboard_review">
+                          <div className="row mt-2 my_dashboard_review bgc-f6">
                             <div className="col-lg-12">
                               <h4 className="mb10">Previous Year Policy</h4>
                             </div>

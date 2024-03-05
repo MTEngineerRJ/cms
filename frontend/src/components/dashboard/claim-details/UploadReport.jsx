@@ -23,17 +23,17 @@
 
 //   const onUploadDoc = (e) => {
 //     const file = e.target.files[0];
-  
+
 //     if (!file) {
 //       console.error("No file selected");
 //       return;
 //     }
-  
+
 //     const reader = new FileReader();
-    
+
 //     reader.onloadend = () => {
 //       const fileContentBase64 = reader.result.split(",")[1];
-      
+
 //       // Now you can send fileContentBase64 to your server
 //       const payload = {
 //         file: fileContentBase64,
@@ -42,7 +42,7 @@
 
 //       console.log(payload);
 //       return ;
-  
+
 //       // Assuming you are using axios for making the HTTP request
 //       axios.post("/uploadMedia", payload)
 //         .then((response) => {
@@ -52,7 +52,7 @@
 //           console.error("Error uploading file:", error);
 //         });
 //     };
-  
+
 //     reader.readAsDataURL(file);
 //   };
 
@@ -70,17 +70,17 @@
 //   const onFileSelect=(e)=>{
 //     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 //     const file = e.target.files[0];
-  
+
 //     if (!file) {
 //       console.error("No file selected");
 //       return;
 //     }
-  
+
 //     const reader = new FileReader();
-    
+
 //     reader.onloadend = () => {
 //       const fileContentBase64 = reader.result.split(",")[1];
-      
+
 //       // Now you can send fileContentBase64 to your server
 //       const payload = {
 //         file: fileContentBase64,
@@ -90,7 +90,7 @@
 //       // Assuming you are using axios for making the HTTP request
 //       axios.post("/api/uploadFile", payload)
 //         .then((response) => {
-          
+
 //           console.log("File uploaded successfully:", response.data);
 //           alert("Successfully uploaded!!");
 //         })
@@ -98,7 +98,7 @@
 //           console.error("Error uploading file:", error);
 //         });
 //     };
-  
+
 //     reader.readAsDataURL(file);
 //   }
 
@@ -303,13 +303,12 @@ import { useState } from "react";
 import axios from "axios";
 import Pako from "pako";
 
-const UploadReort = ({leadId}) => {
-
+const UploadReort = ({ leadId }) => {
   const [garage, setGarage] = useState("");
   const [reportType, setReportType] = useState("");
   const [fileName, setFileName] = useState("");
   const [fileUrl, setFileUrl] = useState("");
-  const [uploadedFile,setUploadedFile]=useState("");
+  const [uploadedFile, setUploadedFile] = useState("");
   const router = useRouter();
 
   const types = [
@@ -339,11 +338,11 @@ const UploadReort = ({leadId}) => {
         console.error("No file selected");
         return;
       }
-  
+
       const CHUNK_SIZE = 1024 * 1024; // 1 MB chunks
       const fileSize = file.size;
       let offset = 0;
-  
+
       while (offset < fileSize) {
         const chunk = file.slice(offset, offset + CHUNK_SIZE);
         const chunkContentBase64 = await readFileAsync(chunk);
@@ -355,20 +354,20 @@ const UploadReort = ({leadId}) => {
           LeadId: leadId,
           file: chunkContentBase64,
           token: userInfo[0].Token,
-          uploadedBy:userInfo[0].Username,
+          uploadedBy: userInfo[0].Username,
           isLastChunk: offset + CHUNK_SIZE >= fileSize,
         };
-  
+
         console.log(payload);
-  
+
         // Assuming you are using axios for making the HTTP request
         const response = await axios.post("/api/uploadClaimDocument", payload);
-  
+
         console.log("Chunk uploaded successfully:", response.data);
-  
+
         offset += CHUNK_SIZE;
       }
-  
+
       alert("File uploaded successfully!");
       window.location.reload();
     } catch (error) {
@@ -376,9 +375,8 @@ const UploadReort = ({leadId}) => {
     }
   };
 
-  const fileUploadHandler = async()=>{
+  const fileUploadHandler = async () => {
     try {
-     
       const file = document.getElementById("fileInput").files[0];
       if (!file) {
         console.error("No file selected");
@@ -386,14 +384,12 @@ const UploadReort = ({leadId}) => {
       }
 
       const fileContentBase64 = await readFileAsync(file);
-      const compressedContent = Pako.gzip(fileContentBase64, { to: 'string' });
+      const compressedContent = Pako.gzip(fileContentBase64, { to: "string" });
       setUploadedFile(compressedContent);
-    }
-    catch (error) {
+    } catch (error) {
       console.error("Error uploading file:", error);
     }
-
-  }
+  };
   // Helper function to read file asynchronously
   const readFileAsync = (file) => {
     return new Promise((resolve, reject) => {
@@ -429,112 +425,120 @@ const UploadReort = ({leadId}) => {
               aria-labelledby="headingFour"
               data-bs-parent="#accordionExample"
             >
-                          <div class="accordion-body">
-                            <div className="row">
-                              <div className="col-lg-12">
-                                <div className="row mt-1 mb-1">
-                                  <div className="col-lg-3 my_profile_setting_input form-group">
-                                    <label
-                                      htmlFor=""
-                                      className="text-color"
-                                      style={{
-                                        color: "#1560bd",
-                                        fontWeight: "",
-                                      }}
-                                    >
-                                      Select Gaarge <span class="text-danger">*</span>
-                                    </label>
-                                  </div>
-                                  <div className="col-lg-5">
-                                    <select
-                                      className="selectpicker form-select"
-                                      data-live-search="true"
-                                      data-width="100%"
-                                      value={garage}
-                                      onChange={(e)=>setGarage(e.target.value)}
-                                    >
-                                      <option data-tokens="Status1">Select</option>
-                                      <option data-tokens="Status1">
-                                        Megapower Car Services
-                                      </option>
-                                      {/* <option data-tokens="Status2">Delhi</option>
+              <div class="accordion-body bgc-f6">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="row mt-1 mb-1">
+                      <div className="col-lg-3 my_profile_setting_input form-group">
+                        <label
+                          htmlFor=""
+                          className="text-color"
+                          style={{
+                            color: "#1560bd",
+                            fontWeight: "",
+                          }}
+                        >
+                          Select Gaarge <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div className="col-lg-5">
+                        <select
+                          className="selectpicker form-select"
+                          data-live-search="true"
+                          data-width="100%"
+                          value={garage}
+                          onChange={(e) => setGarage(e.target.value)}
+                        >
+                          <option data-tokens="Status1">Select</option>
+                          <option data-tokens="Status1">
+                            Megapower Car Services
+                          </option>
+                          {/* <option data-tokens="Status2">Delhi</option>
                                       <option data-tokens="Status3">Chandigarh</option> */}
-                                    </select>
-                                  </div>
-                                  <div className="col-lg-4">
-                                    <label
-                                      htmlFor=""
-                                      className="text-color"
-                                      style={{
-                                        color: "#1560bd",
-                                        cursor: "pointer",
-                                        fontWeight: "",
-                                      }}
-                                    >
-                                      Simple Preliminary Report{" "}
-                                      <span className="flaticon-pdf"></span>
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-lg-12">
-                                <div className="row mt-1 mb-1">
-                                  <div className="col-lg-3 my_profile_setting_input form-group">
-                                    <label
-                                      htmlFor=""
-                                      className="text-color"
-                                      style={{
-                                        color: "#1560bd",
-                                        fontWeight: "",
-                                      }}
-                                    >
-                                      Report Type <span class="text-danger">*</span>
-                                    </label>
-                                  </div>
-                                  <div className="col-lg-5">
-                                    <select
-                                      className="selectpicker form-select"
-                                      data-live-search="true"
-                                      data-width="100%"
-                                      value={reportType}
-                                      onChange={(e)=>setReportType(e.target.value)}
-                                    >
-                                    {types.map((type,index)=>{
-                                      return <option data-tokens="Status1" value={type.name} key={index}>{type.name}</option>
-                                    })}
-                                     
-                                      {/* <option data-tokens="Status2">Delhi</option>
+                        </select>
+                      </div>
+                      <div className="col-lg-4">
+                        <label
+                          htmlFor=""
+                          className="text-color"
+                          style={{
+                            color: "#1560bd",
+                            cursor: "pointer",
+                            fontWeight: "",
+                          }}
+                        >
+                          Simple Preliminary Report{" "}
+                          <span className="flaticon-pdf"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
+                    <div className="row mt-1 mb-1">
+                      <div className="col-lg-3 my_profile_setting_input form-group">
+                        <label
+                          htmlFor=""
+                          className="text-color"
+                          style={{
+                            color: "#1560bd",
+                            fontWeight: "",
+                          }}
+                        >
+                          Report Type <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div className="col-lg-5">
+                        <select
+                          className="selectpicker form-select"
+                          data-live-search="true"
+                          data-width="100%"
+                          value={reportType}
+                          onChange={(e) => setReportType(e.target.value)}
+                        >
+                          {types.map((type, index) => {
+                            return (
+                              <option
+                                data-tokens="Status1"
+                                value={type.name}
+                                key={index}
+                              >
+                                {type.name}
+                              </option>
+                            );
+                          })}
+
+                          {/* <option data-tokens="Status2">Delhi</option>
                                       <option data-tokens="Status3">Chandigarh</option> */}
-                                    </select>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-lg-12">
-                                <div className="row mt-1 mb-1">
-                                  <div className="col-lg-3 my_profile_setting_input form-group">
-                                    <label
-                                      htmlFor=""
-                                      className="text-color"
-                                      style={{
-                                        color: "#1560bd",
-                                        fontWeight: "",
-                                      }}
-                                    >
-                                      File Name <span class="text-danger">*</span>
-                                    </label>
-                                  </div>
-                                  <div className="col-lg-5">
-                                    <input
-                                      type="text"
-                                      className="form-control"
-                                      id="propertyTitle"
-                                      value={fileName}
-                                      onChange={(e)=>setFileName(e.target.value)}
-                                      // placeholder="Enter Registration No."
-                                    />
-                                  </div>
-                                </div>
-                              </div>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-12">
+                    <div className="row mt-1 mb-1">
+                      <div className="col-lg-3 my_profile_setting_input form-group">
+                        <label
+                          htmlFor=""
+                          className="text-color"
+                          style={{
+                            color: "#1560bd",
+                            fontWeight: "",
+                          }}
+                        >
+                          File Name <span class="text-danger">*</span>
+                        </label>
+                      </div>
+                      <div className="col-lg-5">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="propertyTitle"
+                          value={fileName}
+                          onChange={(e) => setFileName(e.target.value)}
+                          // placeholder="Enter Registration No."
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <div className="col-lg-12">
                     <div className="row mt-1 mb-1">
                       <div className="col-lg-3 my_profile_setting_input form-group">
@@ -560,14 +564,18 @@ const UploadReort = ({leadId}) => {
                     </div>
                   </div>
                   <div className="col-lg-4 text-end">
-                        <button className="btn btn-color mt-0 " onClick={onUploadDoc}>Upload</button>
-                      </div>
-                    </div>
+                    <button
+                      className="btn btn-color mt-0 "
+                      onClick={onUploadDoc}
+                    >
+                      Upload
+                    </button>
                   </div>
-                  <div className="col-lg-12">
-                    <div className="row">
-                      <Exemple  leadId={leadId}/>
-               
+                </div>
+              </div>
+              <div className="col-lg-12">
+                <div className="row">
+                  <Exemple leadId={leadId} />
                 </div>
               </div>
             </div>
@@ -579,4 +587,3 @@ const UploadReort = ({leadId}) => {
 };
 
 export default UploadReort;
-

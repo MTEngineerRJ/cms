@@ -51,7 +51,7 @@ const GarageDetails = (edit, editHandler) => {
               aria-labelledby="headingNine"
               data-bs-parent="#accordionExample"
             >
-              <div class="accordion-body">
+              <div class="accordion-body bgc-f6">
                 <div className="col-lg-1 m-1">
                   {editCase_03 ? (
                     <button

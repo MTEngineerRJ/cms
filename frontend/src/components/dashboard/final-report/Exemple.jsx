@@ -167,7 +167,16 @@ export default function Exemple_01({
   const [allRows, setAllRows] = useState([]);
   const [newParts, setNewParts] = useState([]);
 
+  const [allRemarks,setAllRemarks]=useState([
+    'Not allowed','Intact',' Repair allowed','IMT23',
+    'Not correlate','Not relevant','Damaged','Broken',
+    'As per PI','Burnt','Not payable'
+  ]);
+
   const [changeParts, setChangeParts] = useState(false);
+
+
+  console.log("alldeps",allDepreciations);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -198,7 +207,7 @@ export default function Exemple_01({
         },
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data.userData);
 
         // setNewParts(res.data.userData);
         let newPart = res.data.userData;
@@ -216,6 +225,10 @@ export default function Exemple_01({
             const overall_e = Number(part.Estimate) * Number(part.QE);
             const GSTT_e = (overall_e * Number(part.GSTPct)) / 100;
             const GSTT = (overall * Number(part.GSTPct)) / 100;
+
+            const requiredTotal = part.WithTax === 1 || part.WithTax === 3   ? overall + GSTT : overall;
+            console.log("requiredTotal",requiredTotal)
+
             const temp = {
               _id: index + 1,
               description: part.ItemName,
@@ -229,7 +242,7 @@ export default function Exemple_01({
               bill_sr: part.BillSr,
               gst: part.GSTPct,
               type: part.TypeOfMaterial,
-              total: overall + GSTT,
+              total: requiredTotal,
               sno: part.ReportID,
               isActive: Number(part.IsActive),
             };
@@ -260,6 +273,7 @@ export default function Exemple_01({
           }
         });
         console.log(temp_row);
+        console.log("totalRows in firat load",allRows);
         setAllRows(temp_row);
         setCurrentType(type);
         console.log("metal",metalParts)
@@ -287,29 +301,34 @@ export default function Exemple_01({
     
   },[allRows]);
 
- 
-  // useEffect(()=>{
-  //   let temp_row =[];
-  //   newParts.map((part,index)=>{
-  //     const temp = {
-  //       description:part.ItemName,
-  //       dep:part.DepreciationPct,
-  //       sac:part.HSNCode,
-  //       remark:part.Remark,
-  //       estimate:part.Estimate,
-  //       assessed:part.Assessed,
-  //       qa:part.QA,
-  //       qe:part.QE,
-  //       bill_sr:part.BillSr,
-  //       gst:part.GSTPct,
-  //       type:part.TypeOfMaterial,
-  //       total:part.WithoutTax,
-  //       sno:part.ReportID
-  //     };
-  //     temp_row.push(temp)
-  //   });
-  //   setAllRows(temp_row);
-  // },[changeParts]);
+  function sortArrayOfObjects(array) {
+    // Ensure the input is an array
+    if (!Array.isArray(array)) {
+      console.error("Input is not an array.");
+      return [];
+    }
+  
+    // Sort the array based on the PartType property
+    const sortedArray = array.slice().sort((a, b) => {
+      const partTypeA = a.PartType.toLowerCase();
+      const partTypeB = b.PartType.toLowerCase();
+  
+      if (partTypeA < partTypeB) return -1;
+      if (partTypeA > partTypeB) return 1;
+      return 0;
+    });
+  
+    return sortedArray;
+  }
+  
+
+
+
+  useEffect(()=>{
+    let tempDep = sortArrayOfObjects(allDepreciations);
+    setAllDepreciations(tempDep)
+
+  },[allDepreciations]);
 
   useEffect(() => {
     console.log(currentType);
@@ -323,6 +342,7 @@ export default function Exemple_01({
     setTotaAssessed(calculateTotalAssessed);
     setTotalEstimate(calculateTotalEstimated);
     setTotalDifference(totalEstimate - totalAssessed);
+   
   }, [change2, currentType]);
   const openEditHandler = (idx) => {
     // console.log(idx);
@@ -343,7 +363,7 @@ export default function Exemple_01({
   useEffect(() => {
     calculateTotalAssessed();
     calculateTotalEstimated();
-    handleTotalChange();
+   handleTotalChange();
   }, [policyType]);
 
   const totalValue = () => {
@@ -434,7 +454,6 @@ export default function Exemple_01({
   const sortNewParts=()=>{
     let sortedArray =allRows;
      sortedArray.sort((a, b) => a.sno - b.sno);
-    console.log("so:rted arrays fo54giptojj;otengt",sortedArray)
     return sortedArray;
 
   }
@@ -588,6 +607,8 @@ export default function Exemple_01({
     // console.log(oldRow);
   };
 
+
+
   const calculateTotalAssessed = () => {
     let without_gst = 0,
       with_gst = 0;
@@ -689,15 +710,16 @@ export default function Exemple_01({
   };
 
   const changeTotalAccordingToPolicyType = (policy) => {
+    console.log("currentType",policy,currentType)
     setCurrentType(policy);
 
     setPreRender(true);
     setToggleGST(2);
 
     const isIncludeGSTInAssessed =
-      policy === "Assessed" || policy === "Both" ? true : false;
+      String(policy) === "Assessed" || String(policy) === "Both" ;
     const isIncludeGSTInEstimate =
-      policy === "Estimate" || policy === "Both" ? true : false;
+    String(policy) === "Estimate" || String(policy) === "Both" ? true : false;
 
     let total_estimate = 0;
     let total_metal_sum = 0;
@@ -731,12 +753,9 @@ export default function Exemple_01({
       const overall = Number(row.assessed) * Number(row.qa);
       const subtract_before = 0;
       const subtract = overall - subtract_before;
-      const total =
-        subtarct_final +
-        (isIncludeGSTInAssessed
-          ? (overall_assessed * Number(row.gst)) / 100
-          : 0);
-      updatedRow.total = total;
+      const gst = (overall * Number(row.gst))/100;
+      const totalVal = String(policy)==="Both" || String(policy)==="Assessed"? overall +  gst : overall;
+      updatedRow.total = totalVal;
       updatedOne.push(updatedRow);
     });
     setAllRows(updatedOne);
@@ -853,7 +872,7 @@ export default function Exemple_01({
     const total_without = overall - subtract;
     const total =
       Number(currentField.assessed) * Number(qa) +
-      (currentType === "Assessed" | String(currentType) === "Both"
+      (currentType === "Assessed" || String(currentType) === "Both"
         ? (total_without * Number(currentField.gst)) / 100
         : 0);
 
@@ -967,7 +986,7 @@ export default function Exemple_01({
     const total_without = overall - subtract;
     const total =
       Number(currentField.assessed) * Number(currentField.qa) +
-      (currentType === "Assessed"| String(currentType) === "Both" ? (total_without * Number(gst)) / 100 : 0);
+      String(currentType === "Assessed"|| String(currentType) === "Both" ? (total_without * Number(gst)) / 100 : 0);
 
     const newOutput = {
       _id: currentField._id, // You may use a more robust ID generation logic
@@ -1076,6 +1095,19 @@ export default function Exemple_01({
     setChange(true);
     // console.log(oldRow);
   };
+
+  const calculateTotal = (id)=>{
+    let row = {};
+    allRows.map((tempRow,index)=>{
+      if(String(tempRow.sno) === String(id)){
+        row=tempRow;
+      }
+    });
+
+    const overall = Number(row?.assessed) * Number(row?.qe);
+    const gst = String(currentType) === "Both" ||  String(currentType) === "Assessed" ? overall * Number(18.5)/100 : 0;
+    return overall + gst;
+  }
 
   console.log(toggleGST, currentType, "type");
 
@@ -1212,42 +1244,50 @@ export default function Exemple_01({
                 onChange={(e) => handleChange(index, e.target.value, "remark")}
                 disabled={!edit}
               >
-                <option data-tokens="Status1" value={"Regular"}>
-                  Not allowed
-                </option>
+               
+              <option data-tokens="Status1" value={" As per PI"}>
+              As per PI
+            </option>
+            <option data-tokens="Status2" value={"Burnt"}>
+              Burnt
+            </option>
+              <option data-tokens="Status1" value={"Broken"}>
+                Broken
+              </option>
+              <option data-tokens="Status2" value={"Damaged"}>
+              Damaged
+            </option>
+            <option data-tokens="Status1" value={"IMT23"}>
+              IMT23
+            </option>
+           
                 <option data-tokens="Status1" value={"Intact"}>
                   Intact
                 </option>
+            <option data-tokens="Status1" value={"Regular"}>
+            Not allowed
+           </option>
+           <option data-tokens="Status1" value={"Not correlate"}>
+           Not correlate
+         </option>
+         <option
+         data-tokens="Status3"
+         value={"Not payable"}
+       >
+         Not payable
+       </option>
+         <option data-tokens="Status2" value={"Not relevant"}>
+           Not relevant
+         </option>
+        
+             
+         
+              
                 <option data-tokens="Status2" value={"Repair allowed"}>
                   Repair allowed
                 </option>
-                <option data-tokens="Status1" value={"IMT23"}>
-                  IMT23
-                </option>
-                <option data-tokens="Status1" value={"Not correlate"}>
-                  Not correlate
-                </option>
-                <option data-tokens="Status2" value={"Not relevant"}>
-                  Not relevant
-                </option>
-                <option data-tokens="Status2" value={"Damaged"}>
-                  Damaged
-                </option>
-                <option data-tokens="Status1" value={"Broken"}>
-                  Broken
-                </option>
-                <option data-tokens="Status1" value={" As per PI"}>
-                  As per PI
-                </option>
-                <option data-tokens="Status2" value={"Burnt"}>
-                  Burnt
-                </option>
-                <option
-                  data-tokens="Status3"
-                  value={"Not payable"}
-                >
-                  Not payable
-                </option>
+               
+             
               </select>
             ),
             assessed: (
@@ -1331,7 +1371,7 @@ export default function Exemple_01({
               <input
                 className="form-control form-control-table"
                 type="number"
-                value={roundOff(row.total)}
+                value={roundOff(calculateTotal(row.sno))}
                 // onChange={(e)=>handleChange(index,e.target.value,"gst")}
                 required
                 disabled={!edit}

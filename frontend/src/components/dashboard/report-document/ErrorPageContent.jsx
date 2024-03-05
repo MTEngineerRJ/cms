@@ -532,27 +532,13 @@ const ErrorPageContent = ({ allInfo }) => {
       {/* common header for all page */}
 
       {/* Header Content */}
-      <div style={{ width: "", color: "black" }}>
+      {/* <div style={{ width: "", color: "black" }}>
         <h3 className="text-dark">MT Engineer</h3>{" "}
         <span>
           {" "}
-          <div style={{ position: "absolute", top: "10px", right: "10px" }}>
-            {/* <Dropdown>
-              <Dropdown.Toggle variant="primary" id="dropdown-extract">
-                Extract
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleExtract("Word")}>
-                  Extract to Word
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <button className="btn" onClick={downloadPDF}>
-                    Extract PDF
-                  </button>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
-          </div>
+          <div
+            style={{ position: "absolute", top: "10px", right: "10px" }}
+          ></div>
         </span>
         <p className="fw-bold text-dark">Legal Investigator Pvt. Ltd.</p>
         <p className="text-dark">
@@ -564,9 +550,17 @@ const ErrorPageContent = ({ allInfo }) => {
           <p className="text-dark">Tel. No. : +91 94688-81222</p>{" "}
           <p className="text-dark">Email: legalmt04@gmail.com</p>
         </div>
-        {/* <p>Email: {allInfo?.otherInfo[0]?.BrokerMailAddress}</p> */}
-        {/* <p>Lic No. IRDA/CORP/SLA-200018 DOE 07.02.2025</p> */}
         <p className="text-dark">GSTIN : 08AAPCM1051K1Z9</p>
+      </div> */}
+      <div>
+        <Image
+          width={661}
+          height={189}
+          priority
+          className="w50"
+          src="/assets/images/header.jpg"
+          alt="1.jpg"
+        />
       </div>
       <hr style={{ border: "2px solid black" }} />
       {/* Header Content */}
@@ -609,70 +603,124 @@ const ErrorPageContent = ({ allInfo }) => {
       <hr style={{ border: "2px solid black" }} />
       <div>
         <h5 className="text-dark">INSURANCE PARTICULARS :</h5>
-        <div className=" text-start d-flex gap-5 text-dark">
-          <div>
-            <label htmlFor="">(a) Policy / Cover Note No. : </label>
-            <span className="fw-bold text-dark">
-              {" "}
-              {allInfo?.otherInfo[0]?.PolicyNumber}
-            </span>
+        <div className="row">
+          <div className="col-lg-6">
+            <div className="row">
+              <div className="col-lg-5 ">
+                <label htmlFor="">(a) Policy / Cover Note No. </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6 text-start">
+                <span className="fw-bold text-dark">
+                  {" "}
+                  {allInfo?.otherInfo[0]?.PolicyNumber}
+                </span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(b) Period of Insurance </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span>
+                  {" "}
+                  {formatDate(allInfo?.otherInfo[0]?.PolicyPeriodStart)} to{" "}
+                  {formatDate(allInfo?.otherInfo[0]?.PolicyPeriodEnd)}
+                </span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(c) Endorsement </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> 33030331230100004487</span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(d) Insurers </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span>
+                  {" "}
+                  {allInfo?.otherInfo[0]?.InsuranceCompanyNameAddress}
+                </span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(e) Insured </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span>
+                  {" "}
+                  {allInfo?.otherInfo[0]?.InsuredName}{" "}
+                  {allInfo?.otherInfo[0]?.InsuredMobileNo1}{" "}
+                  {allInfo?.otherInfo[0]?.InsuredAddress}
+                </span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(f) H. P. A. </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> {allInfo?.otherInfo[0]?.HPA} - SGNR</span>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-lg-5">
+                <label htmlFor="">(g) Appointed By </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> {allInfo?.otherInfo[0]?.VehicleInsuranceCompany}</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <label htmlFor="">IDV : -</label>
-            <span> F {allInfo?.otherInfo[0]?.IDV}</span>
+          <div className="col-lg-6">
+            <div className="row">
+              <div className="col-lg-3">
+                <label htmlFor="">IDV </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> F {allInfo?.otherInfo[0]?.IDV}</span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-3">
+                <label htmlFor="">Claim No. </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> {allInfo?.otherInfo[0]?.ClaimNumber} </span>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-3">
+                <label htmlFor="">Token No. </label>
+              </div>
+              <div className="col-lg-1">:</div>
+              <div className="col-lg-6">
+                <span> {allInfo?.otherInfo[0].Token}</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="d-flex gap-5">
-          <div>
-            <label htmlFor="">(b) Period of Insurance</label>
-            <span>
-              {" "}
-              {formatDate(allInfo?.otherInfo[0]?.PolicyPeriodStart)} to{" "}
-              {formatDate(allInfo?.otherInfo[0]?.PolicyPeriodEnd)}
-            </span>
-          </div>
-          <div>
-            <label htmlFor="">Claim No. : -</label>
-            <span> {allInfo?.otherInfo[0]?.ClaimNumber} </span>
-          </div>
-        </div>
-        <div className=" text-start d-flex gap-5">
-          <div>
-            <label htmlFor="">(c) Endorsement : </label>
-            <span> 33030331230100004487</span>
-          </div>
-          <div>
-            <label htmlFor="">Token No. : -</label>
-            <span> {allInfo?.otherInfo[0].Token}</span>
-          </div>
-        </div>
-        <div className=" text-start d-flex gap-5">
-          <div>
-            <label htmlFor="">(d) Insurers : </label>
-            <span> {allInfo?.otherInfo[0]?.InsuranceCompanyNameAddress}</span>
-          </div>
-        </div>
-        <div className=" text-start d-flex gap-5">
-          <div>
-            <label htmlFor="">(e) Insured : </label>
-            <span>
-              {" "}
-              {allInfo?.otherInfo[0]?.InsuredName}{" "}
-              {allInfo?.otherInfo[0]?.InsuredMobileNo1}{" "}
-              {allInfo?.otherInfo[0]?.InsuredAddress}
-            </span>
-          </div>
-        </div>
-        <div className=" text-start d-flex gap-5">
-          <div>
-            <label htmlFor="">(f) H. P. A. : </label>
-            <span> {allInfo?.otherInfo[0]?.HPA} - SGNR</span>
-          </div>
-        </div>
-        <div className=" text-start d-flex gap-5">
-          <div>
-            <label htmlFor="">(g) Appointed By : </label>
-            <span> {allInfo?.otherInfo[0]?.VehicleInsuranceCompany}</span>
+        <div className="row">
+          <div className="col-lg-12">
+            
           </div>
         </div>
       </div>
@@ -699,7 +747,7 @@ const ErrorPageContent = ({ allInfo }) => {
         </div>
 
         {/* common header for all page */}
-        <div className="col-lg-12 d-flex justify-content-between mt-5">
+        {/* <div className="col-lg-12 d-flex justify-content-between mt-5">
           <div>
             <h5>MT Engineer</h5>
           </div>
@@ -707,7 +755,7 @@ const ErrorPageContent = ({ allInfo }) => {
             <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
           </div>
         </div>
-        <div style={{ border: "1px solid black" }} className="mb-2"></div>
+        <div style={{ border: "1px solid black" }} className="mb-2"></div> */}
         {/* common header for all page */}
 
         <div className=" text-start d-flex gap-5">
@@ -895,7 +943,7 @@ const ErrorPageContent = ({ allInfo }) => {
         </div>
 
         {/* common header for all page */}
-        <div className="col-lg-12 d-flex justify-content-between">
+        {/* <div className="col-lg-12 d-flex justify-content-between">
           <div>
             <h5 className="text-dark">MT Engineer</h5>
           </div>
@@ -903,7 +951,7 @@ const ErrorPageContent = ({ allInfo }) => {
             <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
           </div>
         </div>
-        <div style={{ border: "1px solid black" }} className="mb-2"></div>
+        <div style={{ border: "1px solid black" }} className="mb-2"></div> */}
         {/* common header for all page */}
 
         <div className=" text-start d-flex gap-5">
@@ -986,6 +1034,18 @@ const ErrorPageContent = ({ allInfo }) => {
           </span>
         </span>
       </div>
+
+      {/* common header for all page */}
+      {/* <div className="col-lg-12 d-flex justify-content-between">
+        <div>
+          <h5 className="text-dark">MT Engineer</h5>
+        </div>
+        <div>
+          <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
+        </div>
+      </div>
+      <div style={{ border: "1px solid black" }} className="mb-2"></div> */}
+      {/* common header for all page */}
       <hr />
       <div className="">
         <span>
@@ -995,18 +1055,6 @@ const ErrorPageContent = ({ allInfo }) => {
         </span>
       </div>
       <br />
-
-      {/* common header for all page */}
-      <div className="col-lg-12 d-flex justify-content-between">
-        <div>
-          <h5 className="text-dark">MT Engineer</h5>
-        </div>
-        <div>
-          <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
-        </div>
-      </div>
-      <div style={{ border: "1px solid black" }} className="mb-2"></div>
-      {/* common header for all page */}
 
       <div className="">
         <h4 className="text-dark">New Parts :</h4>
@@ -1504,6 +1552,17 @@ const ErrorPageContent = ({ allInfo }) => {
       </div>
       <div className="mt-4">
         <h4 className="text-dark">SUMMARY OF ASSESSMENT</h4>
+        {/* common header for all page */}
+        {/* <div className="col-lg-12 d-flex justify-content-between">
+          <div>
+            <h5 className="text-dark">MT Engineer</h5>
+          </div>
+          <div>
+            <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
+          </div>
+        </div>
+        <div style={{ border: "1px solid black" }} className="mb-2"></div> */}
+        {/* common header for all page */}
         <table border={1} style={{ width: "100%" }}>
           <tr>
             <th
@@ -1597,7 +1656,7 @@ const ErrorPageContent = ({ allInfo }) => {
           </tr>
         </table>
       </div>
-      <div className="mt-4">
+      <div className="mt-5 mb-5">
         <h4 className="text-dark">GST Summary Tax Wise</h4>
         <table style={{ width: "100%" }}>
           <tr>
@@ -2084,7 +2143,7 @@ const ErrorPageContent = ({ allInfo }) => {
       </div>
 
       {/* common header for all page */}
-      <div className="col-lg-12 d-flex justify-content-between">
+      {/* <div className="col-lg-12 d-flex justify-content-between mt-5">
         <div>
           <h5 className="text-dark">MT Engineer</h5>
         </div>
@@ -2092,7 +2151,7 @@ const ErrorPageContent = ({ allInfo }) => {
           <span>MSL/HMH/2024/11/10043 - RJ31CA6796</span>
         </div>
       </div>
-      <div style={{ border: "1px solid black" }} className="mb-2"></div>
+      <div style={{ border: "1px solid black" }} className="mb-2"></div> */}
       {/* common header for all page */}
 
       <div>

@@ -58,9 +58,9 @@ const index = () => {
                   </div>
                 </div>
                 {/* End .col */}
-                <div className="row">
+                <div className="row ">
                   <div className="col-lg-12">
-                    <div className="my_dashboard_review">
+                    <div className="my_dashboard_review bgc-f6">
                       <div className="row">
                         <div className="col-lg-12">
                           <h4 className="mb10">Add Claim</h4>
@@ -116,7 +116,7 @@ const index = () => {
               <div className="row mt200">
                 <div className="col-lg-12">
                   <div className="copyright-widget text-center">
-                    <p>
+                    <p className="text-light">
                       {" "}
                       &copy; {new Date().getFullYear()} Infostics. Made with
                       love.
