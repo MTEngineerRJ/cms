@@ -886,25 +886,10 @@ const getSpecificClaim = async (req, res) => {
   };
 
 
-  // const getAllClaims = (req, res) => {
-  //   const region = req.query.region;
-  //   const sql = "CALL GetPolicyInfoByRegion(?)";
-  //   db.query(sql, [null], (err, result) => {
-  //     if (err) {
-  //       console.error(err);
-  //       res.status(500).send("Internal Server Error");
-  //       return;
-  //     }
-  //     res.send(result);
-  //   });
-  // };
   const getAllClaims = (req, res) => {
-    // const region = req.query.region;
-    const { Region1, Region2, Region3, CalimStatus } = req.query;
-    const sql = "CALL GetPolicyInfoByRegions(?, ?, ?, ?)";
-    const params = [Region1 || null, Region2 || null, Region3 || null, CalimStatus || null];
-
-    db.query(sql, params, (err, result) => {
+    const region = req.query.region;
+    const sql = "CALL GetPolicyInfoByRegion(?)";
+    db.query(sql, [null], (err, result) => {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
@@ -913,6 +898,21 @@ const getSpecificClaim = async (req, res) => {
       res.send(result);
     });
   };
+  // const getAllClaims = (req, res) => {
+  //   // const region = req.query.region;
+  //   const { Region1, Region2, Region3, CalimStatus } = req.query;
+  //   const sql = "CALL GetPolicyInfoByRegions(?, ?, ?, ?)";
+  //   const params = [Region1 || null, Region2 || null, Region3 || null, CalimStatus || null];
+
+  //   db.query(sql, params, (err, result) => {
+  //     if (err) {
+  //       console.error(err);
+  //       res.status(500).send("Internal Server Error");
+  //       return;
+  //     }
+  //     res.send(result);
+  //   });
+  // };
 
 
    const getClaimDetails = (req, res) => {
