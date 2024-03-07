@@ -108,7 +108,7 @@ const Index = ({ leadId, token, content ,type}) => {
 
     const current_url = window.location.href
     const current_type = current_url?.split("&type=")[1]
-    const type_ = current_type?.split("&content")[0]
+    const type_ = current_type?.split("&content=")[0]
     console.log(type_, current_type,current_url )
     const payload = {
       token: token,
